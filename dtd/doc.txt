@@ -1,0 +1,7 @@
+My DTD is an implementation of a Workflow Management System.
+In our system we have a workflow that is a representation of a set of actions that an actor can perform.
+The workflow is characterized by an ID field called name, which uniquely identifies it, and a set of actions.
+Every action has a name, which must be unique within the workflow, and is associated with a role.
+There are two different types of actions: simple actions and process actions.
+Simple actions have a pointer (IDREFS) to a set of actions that could be performed by the actor that has perform that particular action.
+A process action corresponds to the execution of a whole process; they are characterized by a pointer (IDREF) to the name of the nested workflow that they execute.

@@ -1,0 +1,20 @@
+<!-- DTD for telephone users and contracts -->
+<!ELEMENT WorkflowManager (workflow)+ >
+
+<!ELEMENT workflow (action+) >
+<!ATTLIST workflow
+	name ID #REQUIRED	>
+	
+<!ELEMENT action (simple | process) >
+<!ATTLIST action
+	id ID #REQUIRED
+	name CDATA #REQUIRED
+	role CDATA #REQUIRED	>
+	
+<!ELEMENT simple EMPTY >
+<!ATTLIST simple
+	nextActions	IDREFS #IMPLIED	>
+
+<!ELEMENT process EMPTY >
+<!ATTLIST process
+	nextProcess IDREF #REQUIRED >
