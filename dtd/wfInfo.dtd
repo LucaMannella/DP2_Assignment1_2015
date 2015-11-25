@@ -25,3 +25,6 @@
 	In the first case we introduce the problem of the managing of the IDs;
 	in the second case we have to manage the "pointer" directly inside the application code.
 -->
+
+<!-- This DTD file was developed by Luca Mannella for the Assignment 1
+	 of the course Distributed Programming II in Politechnic University of Turin. -->
