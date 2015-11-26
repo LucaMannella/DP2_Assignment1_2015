@@ -1,5 +1,5 @@
 <!-- DTD for a Workflow Management System -->
-<!ELEMENT WorkflowManager (workflow |)+ >
+<!ELEMENT WorkflowManager (workflow)+ >
 
 <!ELEMENT workflow (action+) >
 <!ATTLIST workflow
