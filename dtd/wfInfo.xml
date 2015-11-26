@@ -5,52 +5,52 @@
 
 	<workflow name="ArticleProduction">
 		<action id="ArticleProduction_Writing" name="Writing" role="Journalist">
-			<simple nextActions="ArticleProduction_Checking"></simple>
+			<simple_action nextActions="ArticleProduction_Checking"></simple_action>
 		</action>
 		<action id="ArticleProduction_Checking" name="Checking" role="Editor">
-			<simple nextActions="ArticleProduction_Revising ArticleProduction_Publication"></simple>
+			<simple_action nextActions="ArticleProduction_Revising ArticleProduction_Publication"></simple_action>
 		</action>
 		<action id="ArticleProduction_Revising" name="Revising" role="Journalist">
-			<simple nextActions="ArticleProduction_Checking"></simple>
+			<simple_action nextActions="ArticleProduction_Checking"></simple_action>
 		</action>
 		<action id="ArticleProduction_Publication" name="Publication" role="Editor">
-			<simple></simple>
+			<simple_action></simple_action>
 		</action>
 	</workflow>
 	
 	<workflow name="SaleManagement">
 		<action id="SaleManagement_AcceptOrder" name="AcceptOrder" role="Salesman">
-			<simple nextActions="SaleManagement_NormalSale SaleManagement_PrepaidSale"></simple>
+			<simple_action nextActions="SaleManagement_NormalSale SaleManagement_PrepaidSale"></simple_action>
 		</action>
 		<action id="SaleManagement_NormalSale" name="NormalSale" role="SalesManager">
-			<process nextProcess="NormalSale"></process>
+			<process_action nextProcess="NormalSale"></process_action>
 		</action>
 		<action id="SaleManagement_PrepaidSale" name="PrepaidSale" role="SalesManager">
-			<process nextProcess="PrepaidSale"></process>
+			<process_action nextProcess="PrepaidSale"></process_action>
 		</action>
 	</workflow>
 	
 	<workflow name="NormalSale">
 		<action id="NormalSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman">
-			<simple></simple>
+			<simple_action></simple_action>
 		</action>
 		<action id="NormalSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman">
-			<simple nextActions="NormalSale_PaymentRec"></simple>
+			<simple_action nextActions="NormalSale_PaymentRec"></simple_action>
 		</action>
 		<action id="NormalSale_PaymentRec" name="PaymentRec" role="Accountingman">
-			<simple></simple>
+			<simple_action></simple_action>
 		</action>
 	</workflow>
 	
 	<workflow name="PrepaidSale">
 		<action id="PrepaidSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman">
-			<simple nextActions="PrepaidSale_PaymentRec"></simple>
+			<simple_action nextActions="PrepaidSale_PaymentRec"></simple_action>
 		</action>
 		<action id="PrepaidSale_PaymentRec" name="PaymentRec" role="Accountingman">
-			<simple nextActions="PrepaidSale_GoodsDelivery"></simple>
+			<simple_action nextActions="PrepaidSale_GoodsDelivery"></simple_action>
 		</action>
 		<action id="PrepaidSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman">
-			<simple></simple>
+			<simple_action></simple_action>
 		</action>
 	</workflow>
 	

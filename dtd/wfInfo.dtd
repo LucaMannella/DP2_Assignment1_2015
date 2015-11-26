@@ -1,24 +1,29 @@
 <!-- DTD for a Workflow Management System -->
-<!ELEMENT WorkflowManager (workflow)+ >
+<!ELEMENT WorkflowManager (workflow |)+ >
 
 <!ELEMENT workflow (action+) >
 <!ATTLIST workflow
 	name ID #REQUIRED	>
 	
-<!ELEMENT action (simple | process) >
+<!ELEMENT action (simple_action | process_action) >
 <!ATTLIST action
 	id ID #REQUIRED
 	name CDATA #REQUIRED
 	role CDATA #REQUIRED	>
 	
-<!ELEMENT simple EMPTY >
-<!ATTLIST simple
+<!ELEMENT simple_action EMPTY >
+<!ATTLIST simple_action
 	nextActions	IDREFS #IMPLIED	>
 
-<!ELEMENT process EMPTY >
-<!ATTLIST process
+<!ELEMENT process_action EMPTY >
+<!ATTLIST process_action
 	nextProcess IDREF #REQUIRED >
 	
+<!ELEMENT actor EMPTY >
+<!ATTLIST actor
+	name CDATA #REQUIRED
+	role CDATA #REQUIRED	>
+
 <!-- 
 	We can manage the problem in 2 differente ways: 
 	using the IDRef(s) like in this case or doesn't use them.
