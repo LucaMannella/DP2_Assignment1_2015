@@ -53,8 +53,9 @@ public class WFInfoSerializer {
 	
 	public static void main(String[] args) {
 		// This class should receive the name of the output file.
-		if(args.length != 2) {
+		if(args.length != 1) {
 			System.err.println("Error! Usage: "+args[0]+" <output.xml>");
+			System.err.println("args.length is equal to "+args.length);
 			return;
 		}
 		
@@ -62,13 +63,13 @@ public class WFInfoSerializer {
 		try {
 			wf = new WFInfoSerializer();
 			
-			PrintWriter fpout = new PrintWriter(new FileWriter(args[1]));
+			PrintWriter fpout = new PrintWriter(new FileWriter(args[0]));
 			fpout.println(XML_Declaration);
 			fpout.println(DTD_Declaration);
 			fpout.println("<"+ROOT_Element+">");
 			
 			wf.printWorkflows(fpout);
-			wf.printProcesses(fpout);
+			//wf.printProcesses(fpout);
 			
 			fpout.println("</"+ROOT_Element+">");
 
@@ -83,86 +84,87 @@ public class WFInfoSerializer {
 		}
 	}
 	
-	//TODO: method copied by WFInfo. please, modify it!
+	//TODO: Method completed --- should be still tested!
 	private void printWorkflows(PrintWriter fpout) {
+				
 		// Get the list of workflows
-		Set<WorkflowReader> set = monitor.getWorkflows();
-		
-		/* Print the header of the table */
-		System.out.println("#");
-		System.out.println("#Number of Workflows: "+set.size());
-		System.out.println("#");
-		//-String header = new String("#List of workflows:");
-		//-printHeader(header);	
+		Set<WorkflowReader> WorkFlows = monitor.getWorkflows();
 		
 		// For each workflow print related data
-		for (WorkflowReader wfr: set) {
-			System.out.println();
-			System.out.println("Data for Workflow " + wfr.getName());
-			System.out.println();
+		for (WorkflowReader wfr: WorkFlows) {
+			String wfrName = wfr.getName();								//taking workflow name
+			fpout.println("\t<workflow name=\""+wfrName+"\">");	//opening workflow
 	
-			// Print actions
-			System.out.println("Actions:");
-			Set<ActionReader> setAct = wfr.getActions();
-			//-printHeader("Action Name\tRole\t\tAutom.Inst.\tSimple/Process\tWorkflow\tNext Possible Actions");
-			for (ActionReader ar: setAct) {
-				System.out.print(ar.getName()+"\t"+ar.getRole()+"\t"+ar.isAutomaticallyInstantiated()+"\t");
+			// Get the list of actions
+			Set<ActionReader> Actions = wfr.getActions();
+			
+			for (ActionReader ar: Actions) {
+				String aName = ar.getName();							//taking action name
+				String id = wfrName+"_"+aName;							//building the ID
+				String fields = "id=\""+id+"\" name=\""+aName+"\" role=\""+ar.getRole()+"\"";
+				
+				fpout.println("\t\t<action "+fields+">");
+				
 				if (ar instanceof SimpleActionReader) {
-					System.out.print("\tSimple\t\t"+"-\t\t");
-					// Print next actions
-					Set<ActionReader> setNxt = ((SimpleActionReader)ar).getPossibleNextActions();
-					for (ActionReader nAct: setNxt)
-						System.out.print(nAct.getName()+" ");
-					System.out.println();
+					fields="";
+					// taking next actions
+					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
+					for (ActionReader nextAct: setNext)
+						fields += nextAct.getName()+" ";
+					
+					//printing the simple action
+					fpout.print("\t\t\t<simple_action "+fields+" />");
 				}
 				else if (ar instanceof ProcessActionReader) {
-					System.out.print("\tProcess\t\t");
 					// print workflow
-					System.out.println(((ProcessActionReader)ar).getActionWorkflow().getName());
+					String nextWorkflow = ((ProcessActionReader)ar).getActionWorkflow().getName();
+					fpout.print("\t\t\t<process_action "+nextWorkflow+" />");
 				}
+				else {
+					fpout.print("\t\t\t<!-- Element NOT Recognized -->");
+				}
+				fpout.println("\t\t</action>");
 			}
-			System.out.println("#");
+			fpout.println("\t</workflow>");	//closing workflow
 		}	
-		System.out.println("#End of Workflows");
-		System.out.println("#");
 	}
 
 	//TODO: method copied by WFInfo. please, modify it!
 	private void printProcesses(PrintWriter fpout) {
 
 		// Get the list of processes
-		Set<ProcessReader> set = monitor.getProcesses();
+		Set<ProcessReader> WorkFlows = monitor.getProcesses();
 		
 		/* Print the header of the table */
-		System.out.println("#");
-		System.out.println("#Number of Processes: "+set.size());
-		System.out.println("#");
+		fpout.println("#");
+		fpout.println("#Number of Processes: "+WorkFlows.size());
+		fpout.println("#");
 		//-String header = new String("#List of processes:");
 		//-printHeader(header);
 		
 		// For each process print related data
-		for (ProcessReader wfr: set) {
-			System.out.println("Process started at " + 
+		for (ProcessReader wfr: WorkFlows) {
+			fpout.println("Process started at " + 
 								dateFormat.format(wfr.getStartTime().getTime()) +
 					            " "+"- Workflow " + wfr.getWorkflow().getName());
-			System.out.println("Status:");
+			fpout.println("Status:");
 			List<ActionStatusReader> statusSet = wfr.getStatus();
 			//-printHeader("Action Name\tTaken in charge by\tTerminated");
 			for (ActionStatusReader asr : statusSet) {
-				System.out.print(asr.getActionName()+"\t");
+				fpout.print(asr.getActionName()+"\t");
 				if (asr.isTakenInCharge())
-					System.out.print(asr.getActor().getName()+"\t\t");
+					fpout.print(asr.getActor().getName()+"\t\t");
 				else
-					System.out.print("-"+"\t\t\t");
+					fpout.print("-"+"\t\t\t");
 				if (asr.isTerminated())
-					System.out.println(dateFormat.format(asr.getTerminationTime().getTime()));
+					fpout.println(dateFormat.format(asr.getTerminationTime().getTime()));
 				else
-					System.out.println("-");
+					fpout.println("-");
 			}
-			System.out.println("#");
+			fpout.println("#");
 		}
-		System.out.println("#End of Processes");
-		System.out.println("#");
+		fpout.println("#End of Processes");
+		fpout.println("#");
 	}
 
 }
