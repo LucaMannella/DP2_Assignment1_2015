@@ -1,5 +1,5 @@
 <!-- DTD for a Workflow Management System -->
-<!ELEMENT WorkflowManager (workflow)+ >
+<!ELEMENT WorkflowManager (workflow | process)+ >
 
 <!ELEMENT workflow (action+) >
 <!ATTLIST workflow
@@ -18,10 +18,23 @@
 <!ELEMENT process_action EMPTY >
 <!ATTLIST process_action
 	nextProcess IDREF #REQUIRED >
-	
+
+<!ELEMENT process (action_status)+ >
+<!ATTLIST process
+	code ID #REQUIRED
+	workflow IDREF #REQUIRED	>
+
+
+<!-- Do we have to put some information related to the automatic instantiation? -->
+<!-- how manage action and actor? -->
+<!ELEMENT action_status EMPTY>
+<!ATTLIST action_status		
+	actor IDREF "NULL"
+	timestamp CDATA "Not Finished"	>
+
 <!ELEMENT actor EMPTY >
 <!ATTLIST actor
-	name CDATA #REQUIRED
+	name ID #REQUIRED
 	role CDATA #REQUIRED	>
 
 <!-- 
