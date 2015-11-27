@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -58,6 +59,7 @@ public class WFInfoSerializer {
 			System.err.println("args.length is equal to "+args.length);
 			return;
 		}
+		System.out.println("This program will serialize your workflow into an XML file!");
 		
 		WFInfoSerializer wf;
 		try {
@@ -67,11 +69,10 @@ public class WFInfoSerializer {
 			fpout.println(XML_Declaration);
 			fpout.println(DTD_Declaration);
 			fpout.println("<"+ROOT_Element+">");
-			
 			wf.printWorkflows(fpout);
 			//wf.printProcesses(fpout);
-			
 			fpout.println("</"+ROOT_Element+">");
+			fpout.close();
 
 		} catch (WorkflowMonitorException e) {
 			System.err.println("Could not instantiate data generator: "+e.getMessage());
@@ -82,9 +83,15 @@ public class WFInfoSerializer {
 			e.printStackTrace();
 			System.exit(2);
 		}
+		
+		System.out.println("The parsing was completed!");
+		return;
 	}
 	
-	//TODO: Method completed --- should be still tested!
+	/**
+	 * This method prints the information related to the workflows inside an XML file.
+	 * @param fpout - The XML file that you want to write.
+	 */
 	private void printWorkflows(PrintWriter fpout) {
 				
 		// Get the list of workflows
@@ -92,41 +99,47 @@ public class WFInfoSerializer {
 		
 		// For each workflow print related data
 		for (WorkflowReader wfr: WorkFlows) {
-			String wfrName = wfr.getName();								//taking workflow name
-			fpout.println("\t<workflow name=\""+wfrName+"\">");	//opening workflow
+			String wfrName = wfr.getName();							//taking workflow name
+			fpout.println("\t<workflow name=\""+wfrName+"\">");		//opening workflow
 	
 			// Get the list of actions
 			Set<ActionReader> Actions = wfr.getActions();
 			
 			for (ActionReader ar: Actions) {
-				String aName = ar.getName();							//taking action name
-				String id = wfrName+"_"+aName;							//building the ID
+				String aName = ar.getName();						//taking action name
+				String id = wfrName+"_"+aName;						//building the ID
 				String fields = "id=\""+id+"\" name=\""+aName+"\" role=\""+ar.getRole()+"\"";
 				
-				fpout.println("\t\t<action "+fields+">");
-				
+				fpout.println("\t\t<action "+fields+">");	//opening action
 				if (ar instanceof SimpleActionReader) {
-					fields="";
+					
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
-					for (ActionReader nextAct: setNext)
-						fields += nextAct.getName()+" ";
-					
-					//printing the simple action
-					fpout.print("\t\t\t<simple_action "+fields+" />");
+					if(setNext.isEmpty())
+						fpout.println("\t\t\t<simple_action />");
+					else {
+						Iterator<ActionReader> it = setNext.iterator();
+						fields = wfrName+"_"+it.next().getName();	//I must have an element here.
+						while(it.hasNext()) {
+							fields += " "+wfrName+"_"+it.next().getName();
+						}
+						//printing the simple action
+						fpout.println("\t\t\t<simple_action nextActions=\""+fields+"\" />");
+					}
 				}
 				else if (ar instanceof ProcessActionReader) {
 					// print workflow
 					String nextWorkflow = ((ProcessActionReader)ar).getActionWorkflow().getName();
-					fpout.print("\t\t\t<process_action "+nextWorkflow+" />");
+					fpout.println("\t\t\t<process_action nextProcess=\""+nextWorkflow+"\" />");
 				}
 				else {
-					fpout.print("\t\t\t<!-- Element NOT Recognized -->");
+					fpout.println("\t\t\t<!-- Element NOT Recognized -->");
 				}
-				fpout.println("\t\t</action>");
+				fpout.println("\t\t</action>");	//closing action
 			}
 			fpout.println("\t</workflow>");	//closing workflow
-		}	
+		}
+		return;
 	}
 
 	//TODO: method copied by WFInfo. please, modify it!
