@@ -30,6 +30,7 @@ public class WFInfoSerializer {
 	
 	public static final String XML_Declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	public static final String DTD_Declaration = "<!DOCTYPE WorkflowManager SYSTEM \"wfInfo.dtd\" >";
+	public static final String STYLE_Declaration = "<?xml-stylesheet type=\"text/xsl\" href=\"style.xsl\"?>";
 	public static final String ROOT_Element = "WorkflowManager";
 
 	/**
