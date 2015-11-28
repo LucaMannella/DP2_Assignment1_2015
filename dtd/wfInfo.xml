@@ -54,6 +54,55 @@
 			<simple_action />
 		</action>
 	</workflow>
+		
+	
+	<actors>
+		<actor name="John_Doe" role="Journalist"/>
+		<actor name="Marco_Rossi" role="Editor"/>
+		<actor name="Jack_Jamson" role="Salesman"/>
+		<actor name="Mario_Bianchi" role="SalesManager"/>
+		<actor name="Tom_Tomson" role="Warehouseman"/>
+		<actor name="Bruno_Verdi" role="Accountingman"/>
+		<actor name="Nik_Wales" role="Journalist"/>
+		<actor name="Stefano_Villa" role="Salesman"/>
+		<actor name="Andrew_Silver" role="Warehouseman"/>
+	</actors>
+	
+	
+	<process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">
+		<action_status actor="John_Doe" action="ArticleProduction_Writing" timestamp="20/10/2015 16:12"/>
+		<action_status actor="Marco_Rossi" action="ArticleProduction_Checking" timestamp="20/10/2015 18:29"/>
+		<action_status actor="John_Doe" action="ArticleProduction_Revising" timestamp="21/10/2015 10:11"/>
+		<action_status actor="Marco_Rossi" action="ArticleProduction_Publication" timestamp="21/10/2015 11:51"/>
+	</process>
+	
+	<process code="p2" started="20/10/15 08:35" workflow="ArticleProduction">
+		<action_status actor="Nik_Wales" action="ArticleProduction_Writing" timestamp="20/10/15 15:45"/>
+		<action_status actor="Marco_Rossi" action="ArticleProduction_Checking" timestamp="20/10/15 18:20"/>
+		<action_status actor="John_Doe" action="ArticleProduction_Revising" timestamp="Not Finished"/>
+		<action_status action="ArticleProduction_Publication" timestamp="Not Finished"/>
+	</process>
+	
+	<process code="p3" started="19/10/15 13:30" workflow="SaleManagement">
+		<action_status actor="Jack_Jamson" action="SaleManagement_AcceptOrder" timestamp="19/10/15 13:42"/>
+		<action_status actor="Mario_Bianchi" action="SaleManagement_NormalSale" timestamp="20/10/15 09:01"/>
+	</process>
+	
+	<process code="p4" started="20/10/15 09:01" workflow="NormalSale">
+		<action_status actor="Tom_Tomson" action="NormalSale_GoodsDelivery" timestamp="20/10/15 11:23"/>
+		<action_status actor="Bruno_Verdi" action="NormalSale_InvoiceIssuance" timestamp="21/10/15 09:04"/>
+		<action_status actor="Bruno_Verdi" action="NormalSale_PaymentRec" timestamp="Not Finished"/>
+	</process>
+	
+	<process code="p5" started="19/10/15 13:37" workflow="SaleManagement">
+		<action_status actor="Stefano_Villa" action="SaleManagement_AcceptOrder" timestamp="19/10/15 13:43"/>
+		<action_status actor="Mario_Bianchi" action="SaleManagement_PrepaidSale" timestamp="20/10/15 09:00"/>
+	</process>
+	
+	<process code="p6" started="20/10/15 09:00" workflow="PrepaidSale">
+		<action_status action="PrepaidSale_InvoiceIssuance" timestamp="Not Finished"/>
+	</process>
+
 	
 </WorkflowManager>
 

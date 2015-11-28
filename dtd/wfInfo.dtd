@@ -1,7 +1,8 @@
 <!-- DTD for a Workflow Management System -->
-<!ELEMENT WorkflowManager (workflow | process)+ >
+<!ELEMENT WorkflowManager (workflow | process | actors)+ >
 
-<!ELEMENT workflow (action+) >
+
+<!ELEMENT workflow (action)+ >
 <!ATTLIST workflow
 	name ID #REQUIRED	>
 	
@@ -19,24 +20,32 @@
 <!ATTLIST process_action
 	nextProcess IDREF #REQUIRED >
 
+	
 <!ELEMENT process (action_status)+ >
 <!ATTLIST process
 	code ID #REQUIRED
+	started CDATA #REQUIRED
 	workflow IDREF #REQUIRED	>
 
-
 <!-- Do we have to put some information related to the automatic instantiation? -->
-<!-- how manage action and actor? -->
 <!ELEMENT action_status EMPTY>
 <!ATTLIST action_status		
-	actor IDREF "NULL"
+	actor IDREF #IMPLIED
+	action IDREF #REQUIRED
 	timestamp CDATA "Not Finished"	>
+<!-- how manage action and actor? -->
 
+	
+<!ELEMENT actors (actor)+>
+<!ATTLIST actors
+	department ID #IMPLIED	>
+	
 <!ELEMENT actor EMPTY >
 <!ATTLIST actor
 	name ID #REQUIRED
 	role CDATA #REQUIRED	>
 
+	
 <!-- 
 	We can manage the problem in 2 differente ways: 
 	using the IDRef(s) like in this case or doesn't use them.
