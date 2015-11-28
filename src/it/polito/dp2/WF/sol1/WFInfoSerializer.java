@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.ProcessActionReader;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.SimpleActionReader;
@@ -73,8 +75,8 @@ public class WFInfoSerializer {
 			wf.printWorkflows(fpout);
 			fpout.println();
 			wf.printProcesses(fpout);
-			//fpout.println();
-			//wf.printActors(fpout);
+			fpout.println();
+			wf.printActors(fpout);
 			fpout.println("</"+ROOT_Element+">");
 			fpout.close();
 
@@ -146,7 +148,10 @@ public class WFInfoSerializer {
 		return;
 	}
 
-	//TODO: method copied by WFInfo. please, modify it!
+	/**
+	 * This method prints the information related to the processes inside an XML file.
+	 * @param fpout - The XML file that you want to write.
+	 */
 	private void printProcesses(PrintWriter fpout) {
 		int code = 1;
 		
@@ -186,6 +191,39 @@ public class WFInfoSerializer {
 			
 			fpout.println("\t</process>");	//closing process
 		}
+		return;
+	}
+
+	/**
+	 * This method prints the information related to the actors that develop the processes inside an XML file.
+	 * @param fpout - The XML file that you want to write.
+	 */
+	private void printActors(PrintWriter fpout) {
+		Set<Actor> actors = new HashSet<Actor>();
+		fpout.println("\t<actors>");
+		
+		// Taking all the processes
+		Set<ProcessReader> Processes = monitor.getProcesses();
+		for (ProcessReader wfr: Processes)
+		{	
+			// Taking all the action of a process
+			List<ActionStatusReader> statusSet = wfr.getStatus();
+			for (ActionStatusReader asr : statusSet)
+			{	
+				if(asr.isTakenInCharge()) {		//only if the action was taken in charge
+					// Taking the actor from each action
+					actors.add( asr.getActor() );
+				}
+			}
+		}
+		
+		for (Actor a : actors) {
+			String fields = "name=\""+a.getName().replaceAll(" ", "_")+"\" role=\""+a.getRole()+"\"";
+			fpout.println("\t\t<actor "+fields+"/>");
+			//example <actor name="John_Doe" role="Journalist"/>
+		}
+		
+		fpout.println("\t</actors>");
 		return;
 	}
 
