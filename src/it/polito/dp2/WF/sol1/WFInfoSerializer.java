@@ -71,7 +71,10 @@ public class WFInfoSerializer {
 			fpout.println(DTD_Declaration);
 			fpout.println("<"+ROOT_Element+">");
 			wf.printWorkflows(fpout);
-			//wf.printProcesses(fpout);
+			fpout.println();
+			wf.printProcesses(fpout);
+			//fpout.println();
+			//wf.printActors(fpout);
 			fpout.println("</"+ROOT_Element+">");
 			fpout.close();
 
@@ -145,40 +148,45 @@ public class WFInfoSerializer {
 
 	//TODO: method copied by WFInfo. please, modify it!
 	private void printProcesses(PrintWriter fpout) {
-
-		// Get the list of processes
-		Set<ProcessReader> WorkFlows = monitor.getProcesses();
-		
-		/* Print the header of the table */
-		fpout.println("#");
-		fpout.println("#Number of Processes: "+WorkFlows.size());
-		fpout.println("#");
-		//-String header = new String("#List of processes:");
-		//-printHeader(header);
+		int code = 1;
 		
 		// For each process print related data
-		for (ProcessReader wfr: WorkFlows) {
-			fpout.println("Process started at " + 
-								dateFormat.format(wfr.getStartTime().getTime()) +
-					            " "+"- Workflow " + wfr.getWorkflow().getName());
-			fpout.println("Status:");
+		Set<ProcessReader> Processes = monitor.getProcesses();
+		
+		for (ProcessReader wfr: Processes) {
+			String workflow = wfr.getWorkflow().getName();
+			
+			String fields = "code=\"p"+code+"\" "+
+				"started=\""+dateFormat.format(wfr.getStartTime().getTime())+"\" "+
+					"workflow=\""+workflow+"\"";
+			
+			fpout.println("\t<process "+fields+">");			//opening process
+			code++;
+			// example <process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">	//
+			
+			// For each action print related data
 			List<ActionStatusReader> statusSet = wfr.getStatus();
-			//-printHeader("Action Name\tTaken in charge by\tTerminated");
+			
 			for (ActionStatusReader asr : statusSet) {
-				fpout.print(asr.getActionName()+"\t");
-				if (asr.isTakenInCharge())
-					fpout.print(asr.getActor().getName()+"\t\t");
+				//<action_status action="NormalSale_GoodsDelivery" actor="Tom_Tomson" timestamp="20/10/15 11:23"/>
+				fields = "action=\""+workflow+"_"+asr.getActionName()+"\" ";
+				
+				if (asr.isTakenInCharge()) {		//was the action assigned?
+					fields += "actor=\""+asr.getActor().getName().replaceAll(" ", "_")+"\" ";
+					if (asr.isTerminated())			//was the action completed?
+						fields += "timestamp=\""+dateFormat.format(asr.getTerminationTime().getTime())+"\"";
+					else
+						fields += "timestamp=\"Not Finished\"";
+				}
 				else
-					fpout.print("-"+"\t\t\t");
-				if (asr.isTerminated())
-					fpout.println(dateFormat.format(asr.getTerminationTime().getTime()));
-				else
-					fpout.println("-");
+					fields += "timestamp=\"Not Taken\"";
+				
+				fpout.println("\t\t<action_status "+fields+"/>");		//printing the action details
 			}
-			fpout.println("#");
+			
+			fpout.println("\t</process>");	//closing process
 		}
-		fpout.println("#End of Processes");
-		fpout.println("#");
+		return;
 	}
 
 }
