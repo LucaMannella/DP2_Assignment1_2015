@@ -20,6 +20,7 @@ import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
+import test.DomParseV;
 
 /**
  * This class serialize a Workflow into an XML file.
@@ -79,6 +80,9 @@ public class WFInfoSerializer {
 			wf.printActors(fpout);
 			fpout.println("</"+ROOT_Element+">");
 			fpout.close();
+			
+			System.out.println("The created file will be validated");
+			DomParseV.main(args);
 
 		} catch (WorkflowMonitorException e) {
 			System.err.println("Could not instantiate data generator: "+e.getMessage());
