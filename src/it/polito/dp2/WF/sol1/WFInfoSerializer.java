@@ -37,7 +37,7 @@ public class WFInfoSerializer {
 	public static final String ROOT_Element = "WorkflowManager";
 
 	/**
-	 * Default constructror - Same as WFInfo
+	 * Default constructor - Same as WFInfo
 	 * @throws WorkflowMonitorException 
 	 */
 	public WFInfoSerializer() throws WorkflowMonitorException {
