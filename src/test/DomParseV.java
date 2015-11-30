@@ -28,7 +28,7 @@ public class DomParseV {
            DocumentBuilder builder = factory.newDocumentBuilder();
            builder.setErrorHandler(new DomParseVHandler());
            builder.parse( new File(argv[0]) );
-           //System.out.println("Parsing successful!");
+           System.out.println("Parsing successful!");
 
         } catch (SAXParseException spe) {
             // Parsing error (file is not well formed or not valid)

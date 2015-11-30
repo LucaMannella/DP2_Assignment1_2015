@@ -1,6 +1,17 @@
 package it.polito.dp2.WF.sol1;
 
-import java.io.FileWriter;
+import it.polito.dp2.WF.ActionReader;
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.FactoryConfigurationError;
+import it.polito.dp2.WF.ProcessActionReader;
+import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.SimpleActionReader;
+import it.polito.dp2.WF.WorkflowMonitor;
+import it.polito.dp2.WF.WorkflowMonitorException;
+import it.polito.dp2.WF.WorkflowMonitorFactory;
+import it.polito.dp2.WF.WorkflowReader;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
@@ -10,16 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
-import it.polito.dp2.WF.ActionReader;
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.Actor;
-import it.polito.dp2.WF.ProcessActionReader;
-import it.polito.dp2.WF.ProcessReader;
-import it.polito.dp2.WF.SimpleActionReader;
-import it.polito.dp2.WF.WorkflowMonitor;
-import it.polito.dp2.WF.WorkflowMonitorException;
-import it.polito.dp2.WF.WorkflowMonitorFactory;
-import it.polito.dp2.WF.WorkflowReader;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.DOMException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
 import test.DomParseV;
 
 /**
@@ -43,7 +52,7 @@ public class WFInfoSerializer {
 	public WFInfoSerializer() throws WorkflowMonitorException {
 		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
 		monitor = factory.newWorkflowMonitor();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
 	}
 	
 	/**
@@ -53,7 +62,7 @@ public class WFInfoSerializer {
 	public WFInfoSerializer(WorkflowMonitor monitor) {
 		super();
 		this.monitor = monitor;
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
 	}
 	
 	public static void main(String[] args) {
@@ -65,44 +74,71 @@ public class WFInfoSerializer {
 		}
 		System.out.println("This program will serialize your workflow into an XML file!");
 		
-		WFInfoSerializer wf;
-		try {
-			wf = new WFInfoSerializer();
+
+		
+		try { 
+			WFInfoSerializer wf = new WFInfoSerializer();
 			
-			PrintWriter fpout = new PrintWriter(new FileWriter(args[0]));
-			fpout.println(XML_Declaration);
-			fpout.println(DTD_Declaration);
-			fpout.println("<"+ROOT_Element+">");
-			wf.printWorkflows(fpout);
-			fpout.println();
-			wf.printProcesses(fpout);
-			fpout.println();
-			wf.printActors(fpout);
-			fpout.println("</"+ROOT_Element+">");
-			fpout.close();
+			//creating the DOM document
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.newDocument();
+			if(doc==null)
+				throw new DOMException((short)13, "It's impossible to create a DOM!");
 			
-			System.out.println("The created file will be validated");
-			DomParseV.main(args);
+			// Create and append the root element
+			Element root = (Element) doc.createElement(ROOT_Element);
+			doc.appendChild (root);
+			
+			wf.appendWorkflows(doc);
+			wf.appendProcesses(doc);
+			wf.appendActors(doc);
+			
+			// Print the DOM into an XML file
+//			fpout.println(XML_Declaration);
+//			fpout.println(DTD_Declaration);
+			wf.printDOM(doc);
+
 
 		} catch (WorkflowMonitorException e) {
-			System.err.println("Could not instantiate data generator: "+e.getMessage());
+			System.err.println("Could not instantiate the manager class: "+e.getMessage());
 			e.printStackTrace();
 			System.exit(1);
-		} catch (IOException e) {
-			System.err.println("Could not create the output file: "+e.getMessage());
+		} catch (FactoryConfigurationError e) {
+			System.err.println("Could not create a DocumentBuilderFactory: "+e.getMessage());
 			e.printStackTrace();
-			System.exit(2);
+			System.exit(11);
+		} catch (ParserConfigurationException e) {
+			System.err.println("Could not create a DocumentBuilder: "+e.getMessage());
+			e.printStackTrace();
+			System.exit(12);
+		} catch (DOMException e) {
+			System.err.println("There is a problem creating the DOM: "+e.getMessage());
+			e.printStackTrace();
+			System.exit(21);
 		}
 		
+		System.out.println("The created file will be validated");
+		DomParseV.main(args);
 		System.out.println("The parsing was completed!");
 		return;
 	}
 	
+	
 	/**
-	 * This method prints the information related to the workflows inside an XML file.
-	 * @param fpout - The XML file that you want to write.
+	 * This method prints a DOM inside an XML file
+	 * @param doc - The DOM document that you want to write.
 	 */
-	private void printWorkflows(PrintWriter fpout) {
+	private void printDOM(Document doc) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * This method appends the information related to the workflows to a DOM structure.
+	 * @param doc - The DOM document that you want to write.
+	 */
+	private void appendWorkflows(Document doc) {
 				
 		// Get the list of workflows
 		Set<WorkflowReader> WorkFlows = monitor.getWorkflows();
@@ -110,7 +146,7 @@ public class WFInfoSerializer {
 		// For each workflow print related data
 		for (WorkflowReader wfr: WorkFlows) {
 			String wfrName = wfr.getName();							//taking workflow name
-			fpout.println("\t<workflow name=\""+wfrName+"\">");		//opening workflow
+			doc.println("\t<workflow name=\""+wfrName+"\">");		//opening workflow
 	
 			// Get the list of actions
 			Set<ActionReader> Actions = wfr.getActions();
@@ -120,13 +156,13 @@ public class WFInfoSerializer {
 				String id = wfrName+"_"+aName;						//building the ID
 				String fields = "id=\""+id+"\" name=\""+aName+"\" role=\""+ar.getRole()+"\"";
 				
-				fpout.println("\t\t<action "+fields+">");	//opening action
+				doc.println("\t\t<action "+fields+">");	//opening action
 				if (ar instanceof SimpleActionReader) {
 					
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
 					if(setNext.isEmpty())
-						fpout.println("\t\t\t<simple_action />");
+						doc.println("\t\t\t<simple_action />");
 					else {
 						Iterator<ActionReader> it = setNext.iterator();
 						fields = wfrName+"_"+it.next().getName();	//I must have an element here.
@@ -134,29 +170,29 @@ public class WFInfoSerializer {
 							fields += " "+wfrName+"_"+it.next().getName();
 						}
 						//printing the simple action
-						fpout.println("\t\t\t<simple_action nextActions=\""+fields+"\" />");
+						doc.println("\t\t\t<simple_action nextActions=\""+fields+"\" />");
 					}
 				}
 				else if (ar instanceof ProcessActionReader) {
 					// print workflow
 					String nextWorkflow = ((ProcessActionReader)ar).getActionWorkflow().getName();
-					fpout.println("\t\t\t<process_action nextProcess=\""+nextWorkflow+"\" />");
+					doc.println("\t\t\t<process_action nextProcess=\""+nextWorkflow+"\" />");
 				}
 				else {
-					fpout.println("\t\t\t<!-- Element NOT Recognized -->");
+					doc.println("\t\t\t<!-- Element NOT Recognized -->");
 				}
-				fpout.println("\t\t</action>");	//closing action
+				doc.println("\t\t</action>");	//closing action
 			}
-			fpout.println("\t</workflow>");	//closing workflow
+			doc.println("\t</workflow>");	//closing workflow
 		}
 		return;
 	}
 
 	/**
-	 * This method prints the information related to the processes inside an XML file.
-	 * @param fpout - The XML file that you want to write.
+	 * This method appends the information related to the processes to a DOM structure.
+	 * @param doc - The DOM document that you want to write.
 	 */
-	private void printProcesses(PrintWriter fpout) {
+	private void appendProcesses(Document doc) {
 		int code = 1;
 		
 		// For each process print related data
@@ -169,7 +205,7 @@ public class WFInfoSerializer {
 				"started=\""+dateFormat.format(wfr.getStartTime().getTime())+"\" "+
 					"workflow=\""+workflow+"\"";
 			
-			fpout.println("\t<process "+fields+">");			//opening process
+			doc.println("\t<process "+fields+">");			//opening process
 			code++;
 			// example <process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">	//
 			
@@ -190,21 +226,21 @@ public class WFInfoSerializer {
 				else
 					fields += "timestamp=\"Not Taken\"";
 				
-				fpout.println("\t\t<action_status "+fields+"/>");		//printing the action details
+				doc.println("\t\t<action_status "+fields+"/>");		//printing the action details
 			}
 			
-			fpout.println("\t</process>");	//closing process
+			doc.println("\t</process>");	//closing process
 		}
 		return;
 	}
 
 	/**
-	 * This method prints the information related to the actors that develop the processes inside an XML file.
-	 * @param fpout - The XML file that you want to write.
+	 * This method appends the information related to the actors that develop the processes to a DOM structure.
+	 * @param doc - The DOM document that you want to write.
 	 */
-	private void printActors(PrintWriter fpout) {
+	private void appendActors(Document doc) {
 		Set<Actor> actors = new HashSet<Actor>();
-		fpout.println("\t<actors>");
+		doc.println("\t<actors>");
 		
 		// Taking all the processes
 		Set<ProcessReader> Processes = monitor.getProcesses();
@@ -223,11 +259,11 @@ public class WFInfoSerializer {
 		
 		for (Actor a : actors) {
 			String fields = "name=\""+a.getName().replaceAll(" ", "_")+"\" role=\""+a.getRole()+"\"";
-			fpout.println("\t\t<actor "+fields+"/>");
+			doc.println("\t\t<actor "+fields+"/>");
 			//example <actor name="John_Doe" role="Journalist"/>
 		}
 		
-		fpout.println("\t</actors>");
+		doc.println("\t</actors>");
 		return;
 	}
 
