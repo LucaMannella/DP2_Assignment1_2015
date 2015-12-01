@@ -39,6 +39,7 @@ public class WFInfoSerializer {
 	
 	private WorkflowMonitor monitor;
 	private DateFormat dateFormat;
+	private Document doc;
 	
 	public static final String XML_Declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	public static final String DTD_Declaration = "<!DOCTYPE WorkflowManager SYSTEM \"wfInfo.dtd\" >";
@@ -48,22 +49,17 @@ public class WFInfoSerializer {
 	/**
 	 * Default constructor - Same as WFInfo
 	 * @throws WorkflowMonitorException 
+	 * @throws ParserConfigurationException 
 	 */
-	public WFInfoSerializer() throws WorkflowMonitorException {
-		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
-		monitor = factory.newWorkflowMonitor();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
+	public WFInfoSerializer() throws WorkflowMonitorException, ParserConfigurationException {
+		WorkflowMonitorFactory WFfactory = WorkflowMonitorFactory.newInstance();
+		monitor = WFfactory.newWorkflowMonitor();
+		
+		doc = createDOMDocument();
+		
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
 	}
 	
-	/**
-	 * Same constructor of class WFInfo
-	 * @param monitor - A given WorkflowMonitor.
-	 */
-	public WFInfoSerializer(WorkflowMonitor monitor) {
-		super();
-		this.monitor = monitor;
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
-	}
 	
 	public static void main(String[] args) {
 		// This class should receive the name of the output file.
@@ -79,25 +75,21 @@ public class WFInfoSerializer {
 		try { 
 			WFInfoSerializer wf = new WFInfoSerializer();
 			
-			//creating the DOM document
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.newDocument();
-			if(doc==null)
+			if(wf.doc==null)
 				throw new DOMException((short)13, "It's impossible to create a DOM!");
 			
 			// Create and append the root element
-			Element root = (Element) doc.createElement(ROOT_Element);
-			doc.appendChild (root);
+			Element root = (Element) wf.doc.createElement(ROOT_Element);
+			wf.doc.appendChild(root);
 			
-			wf.appendWorkflows(doc);
-			wf.appendProcesses(doc);
-			wf.appendActors(doc);
+			wf.appendWorkflows(root);
+			wf.appendProcesses(root);
+			wf.appendActors(root);
 			
 			// Print the DOM into an XML file
 //			fpout.println(XML_Declaration);
 //			fpout.println(DTD_Declaration);
-			wf.printDOM(doc);
+			wf.printDOM(wf.doc);
 
 
 		} catch (WorkflowMonitorException e) {
@@ -112,10 +104,6 @@ public class WFInfoSerializer {
 			System.err.println("Could not create a DocumentBuilder: "+e.getMessage());
 			e.printStackTrace();
 			System.exit(12);
-		} catch (DOMException e) {
-			System.err.println("There is a problem creating the DOM: "+e.getMessage());
-			e.printStackTrace();
-			System.exit(21);
 		}
 		
 		System.out.println("The created file will be validated");
@@ -136,63 +124,76 @@ public class WFInfoSerializer {
 
 	/**
 	 * This method appends the information related to the workflows to a DOM structure.
-	 * @param doc - The DOM document that you want to write.
+	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendWorkflows(Document doc) {
+	private void appendWorkflows(Element root) {	//TODO: maybe is finished
 				
 		// Get the list of workflows
 		Set<WorkflowReader> WorkFlows = monitor.getWorkflows();
-		
-		// For each workflow print related data
-		for (WorkflowReader wfr: WorkFlows) {
-			String wfrName = wfr.getName();							//taking workflow name
-			doc.println("\t<workflow name=\""+wfrName+"\">");		//opening workflow
+		// For each workflow create related data
+		for (WorkflowReader wfr: WorkFlows)
+		{
+			String wfName = wfr.getName();
+			//creating a workflow with the related name
+			Element workflow = doc.createElement("workflow");
+			workflow.setAttribute("name", wfName);
 	
 			// Get the list of actions
 			Set<ActionReader> Actions = wfr.getActions();
 			
-			for (ActionReader ar: Actions) {
+			for (ActionReader ar: Actions)
+			{
 				String aName = ar.getName();						//taking action name
-				String id = wfrName+"_"+aName;						//building the ID
-				String fields = "id=\""+id+"\" name=\""+aName+"\" role=\""+ar.getRole()+"\"";
+				String id = wfName+"_"+aName;						//building the ID
+				//creating an action to append to the related workflow
+				Element action = doc.createElement("action");
+				action.setAttribute("name", aName);
+				action.setAttribute("id", id);
+				action.setAttribute("role", ar.getRole());
 				
-				doc.println("\t\t<action "+fields+">");	//opening action
+				Element subAction;
 				if (ar instanceof SimpleActionReader) {
-					
+					//creating a simple_action
+					subAction = doc.createElement("simple_action");
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
-					if(setNext.isEmpty())
-						doc.println("\t\t\t<simple_action />");
-					else {
-						Iterator<ActionReader> it = setNext.iterator();
-						fields = wfrName+"_"+it.next().getName();	//I must have an element here.
-						while(it.hasNext()) {
-							fields += " "+wfrName+"_"+it.next().getName();
+					
+					Iterator<ActionReader> it = setNext.iterator();
+					while(it.hasNext()) {
+						String attributes;
+						if( subAction.hasAttributes() ){
+							attributes = subAction.getAttribute("nextActions");
+							attributes += " "+wfName+"_"+it.next().getName();
 						}
-						//printing the simple action
-						doc.println("\t\t\t<simple_action nextActions=\""+fields+"\" />");
+						else{
+							attributes = wfName+"_"+it.next().getName();
+						}
+						subAction.setAttribute("nextActions", attributes);					
 					}
 				}
 				else if (ar instanceof ProcessActionReader) {
-					// print workflow
-					String nextWorkflow = ((ProcessActionReader)ar).getActionWorkflow().getName();
-					doc.println("\t\t\t<process_action nextProcess=\""+nextWorkflow+"\" />");
+					//creating a process_action
+					subAction = doc.createElement("process_action");
+					subAction.setAttribute( "nextProcess", ((ProcessActionReader)ar).getActionWorkflow().getName() );
 				}
 				else {
-					doc.println("\t\t\t<!-- Element NOT Recognized -->");
+					//should be tested
+					subAction = (Element) doc.createComment("Element NOT Recognized");
 				}
-				doc.println("\t\t</action>");	//closing action
+				action.appendChild(subAction);	//appending the subaction to the action
+				
+				workflow.appendChild(action);	//appending action to the workflow
 			}
-			doc.println("\t</workflow>");	//closing workflow
+			root.appendChild(workflow);			//appending workflow to the document
 		}
 		return;
 	}
 
 	/**
 	 * This method appends the information related to the processes to a DOM structure.
-	 * @param doc - The DOM document that you want to write.
+	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendProcesses(Document doc) {
+	private void appendProcesses(Element root) {		//TODO: this method should be re-implemented
 		int code = 1;
 		
 		// For each process print related data
@@ -236,11 +237,11 @@ public class WFInfoSerializer {
 
 	/**
 	 * This method appends the information related to the actors that develop the processes to a DOM structure.
-	 * @param doc - The DOM document that you want to write.
+	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendActors(Document doc) {
+	private void appendActors(Element root) {				//TODO: this method should be re-implemented
 		Set<Actor> actors = new HashSet<Actor>();
-		doc.println("\t<actors>");
+		root.println("\t<actors>");
 		
 		// Taking all the processes
 		Set<ProcessReader> Processes = monitor.getProcesses();
@@ -259,12 +260,22 @@ public class WFInfoSerializer {
 		
 		for (Actor a : actors) {
 			String fields = "name=\""+a.getName().replaceAll(" ", "_")+"\" role=\""+a.getRole()+"\"";
-			doc.println("\t\t<actor "+fields+"/>");
+			root.println("\t\t<actor "+fields+"/>");
 			//example <actor name="John_Doe" role="Journalist"/>
 		}
 		
-		doc.println("\t</actors>");
+		root.println("\t</actors>");
 		return;
 	}
-
+	
+	/**  
+	 * This method create a DOM Document object.
+	 * @return	- The DOM Document
+	 * @throws ParserConfigurationException 
+	 */
+	private Document createDOMDocument() throws ParserConfigurationException {
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		return builder.newDocument();
+	}
 }
