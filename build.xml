@@ -106,6 +106,16 @@
 			<param name="outfile" value="${output}" />
 		</antcall>
 	</target>
+	
+	<target name="WFInfoSerializerManual" depends="setseed">
+		<echo>Output file: ${output}</echo>
+		<echo>Testcase: ${testcase}</echo>
+		<echo>Seed: ${seed}</echo>
+		<echo />
+		<antcall target="WFInfoSerializerManual.test">
+			<param name="outfile" value="${output}" />
+		</antcall>
+	</target>
 
 	<target name="runFuncTest" depends="setseed">
 		<antcall target="runFuncTest.real">
@@ -116,6 +126,21 @@
 
 	<target name="WFInfoSerializer.test" depends="build">
 		<java classname="it.polito.dp2.WF.sol1.WFInfoSerializer" failonerror="true" fork="yes">
+			<sysproperty key="it.polito.dp2.WF.WorkflowMonitorFactory" value="${WFInfo.WFMonitorFactory}" />
+			<sysproperty key="it.polito.dp2.WF.Random.seed" value="${seed}"/>
+			<sysproperty key="it.polito.dp2.WF.Random.testcase" value="${testcase}"/>
+			<arg value="${outfile}" />
+			<classpath>
+				<path refid="WF.classpath" />
+				<pathelement location="${lib.dir}/WFRandom.jar"/>
+				<pathelement path="${build.dir}" />
+			</classpath>
+		</java>
+		<echo>Done.</echo>
+	</target>
+	
+	<target name="WFInfoSerializerManual.test" depends="build">
+		<java classname="it.polito.dp2.WF.sol1.WFInfoSerializerManual" failonerror="true" fork="yes">
 			<sysproperty key="it.polito.dp2.WF.WorkflowMonitorFactory" value="${WFInfo.WFMonitorFactory}" />
 			<sysproperty key="it.polito.dp2.WF.Random.seed" value="${seed}"/>
 			<sysproperty key="it.polito.dp2.WF.Random.testcase" value="${testcase}"/>
