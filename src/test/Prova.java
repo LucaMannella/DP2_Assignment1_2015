@@ -4,9 +4,18 @@ package test;
  * This class will be used for some testing in the first assignment.
  * @author Luca
  */
-public class Prova00 {
+public class Prova {
 
 	public static void main(String[] args) {
+		String banana= new String();
+		String ciao="ciao";
+		banana+=ciao;
+		System.err.println(banana+"\n");
+		
+		return;
+	}
+	
+	private void prova01() {
 		String wfrName = "MyWorkFlow1";
 		String aName = "MyAction1";
 		String role = "MyRole1";
