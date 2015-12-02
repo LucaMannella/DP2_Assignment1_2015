@@ -92,11 +92,7 @@ public class WFInfoSerializer {
 			
 			wf.appendWorkflows();
 			wf.appendProcesses();
-			//wf.appendActors(root);
-			
-			// Print the DOM into an XML file 
-//			fpout.println(XML_Declaration);
-//			fpout.println(DTD_Declaration);
+			wf.appendActors();
 			
 			wf.printDOM(System.out);
 			PrintStream fpout = new PrintStream(new File(args[0]));
@@ -217,7 +213,7 @@ public class WFInfoSerializer {
 	/**
 	 * This method appends the information related to the processes to the DOM structure of the class.
 	 */
-	private void appendProcesses() {		//TODO: this method should be tested
+	private void appendProcesses() {
 		int code = 1;
 		
 		// For each process print related data
@@ -255,10 +251,10 @@ public class WFInfoSerializer {
 				else
 					action.setAttribute("timestamp", "Not Taken");
 				
-				process.appendChild(action);		//appending the process
+				process.appendChild(action);	//appending the action to the process
 			}
 			
-			root.appendChild(process);		//appending the process
+			root.appendChild(process);			//appending the process to the root
 			code++;
 		}
 		
@@ -268,32 +264,34 @@ public class WFInfoSerializer {
 	/**
 	 * This method appends the information related to the actors that develop the processes to the DOM structure of the class. 
 	 */
-	private void appendActors() {				//TODO: this method should be re-implemented
-		Set<Actor> actors = new HashSet<Actor>();
-//		root.println("\t<actors>");
+	private void appendActors() {
+		Set<Actor> actorsSet = new HashSet<Actor>();
+		
+		// creating the actors container
+		Element actors = doc.createElement("actors");
 		
 		// Taking all the processes
 		Set<ProcessReader> Processes = monitor.getProcesses();
-		for (ProcessReader wfr: Processes)
+		for (ProcessReader pr: Processes)
 		{	
 			// Taking all the action of a process
-			List<ActionStatusReader> statusSet = wfr.getStatus();
-			for (ActionStatusReader asr : statusSet)
-			{	
-				if(asr.isTakenInCharge()) {		//only if the action was taken in charge
-					// Taking the actor from each action
-					actors.add( asr.getActor() );
-				}
+			List<ActionStatusReader> actionStatusSet = pr.getStatus();
+			for (ActionStatusReader asr : actionStatusSet)
+			{									// Taking the actor from each action
+				if(asr.isTakenInCharge())		// only if the action was taken in charge
+					actorsSet.add( asr.getActor() );
 			}
 		}
 		
-		for (Actor a : actors) {
-			String fields = "name=\""+a.getName().replaceAll(" ", "_")+"\" role=\""+a.getRole()+"\"";
-//			root.println("\t\t<actor "+fields+"/>");
-			//example <actor name="John_Doe" role="Journalist"/>
+		Element actor;
+		for (Actor a : actorsSet) {
+			actor = doc.createElement("actor");
+			actor.setAttribute( "name", a.getName().replaceAll(" ", "_") );
+			actor.setAttribute( "role", a.getRole() );
+			actors.appendChild(actor);		//appending the actor to the set
 		}
 		
-//		root.println("\t</actors>");
+		root.appendChild(actors);			//appending the actors set to the root
 		return;
 	}
 	

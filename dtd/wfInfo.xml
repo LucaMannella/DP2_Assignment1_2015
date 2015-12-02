@@ -54,19 +54,6 @@
 			<simple_action />
 		</action>
 	</workflow>
-		
-	
-	<actors>
-		<actor name="John_Doe" role="Journalist"/>
-		<actor name="Marco_Rossi" role="Editor"/>
-		<actor name="Jack_Jamson" role="Salesman"/>
-		<actor name="Mario_Bianchi" role="SalesManager"/>
-		<actor name="Tom_Tomson" role="Warehouseman"/>
-		<actor name="Bruno_Verdi" role="Accountingman"/>
-		<actor name="Nik_Wales" role="Journalist"/>
-		<actor name="Stefano_Villa" role="Salesman"/>
-		<actor name="Andrew_Silver" role="Warehouseman"/>
-	</actors>
 	
 	
 	<process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">
@@ -103,7 +90,18 @@
 		<action_status action="PrepaidSale_InvoiceIssuance" timestamp="Not Finished"/>
 	</process>
 
-	
+	<actors>
+		<actor name="John_Doe" role="Journalist"/>
+		<actor name="Marco_Rossi" role="Editor"/>
+		<actor name="Jack_Jamson" role="Salesman"/>
+		<actor name="Mario_Bianchi" role="SalesManager"/>
+		<actor name="Tom_Tomson" role="Warehouseman"/>
+		<actor name="Bruno_Verdi" role="Accountingman"/>
+		<actor name="Nik_Wales" role="Journalist"/>
+		<actor name="Stefano_Villa" role="Salesman"/>
+		<actor name="Andrew_Silver" role="Warehouseman"/>
+	</actors>
+
 </WorkflowManager>
 
 <!-- This XML file was developed by Luca Mannella for the Assignment 1
