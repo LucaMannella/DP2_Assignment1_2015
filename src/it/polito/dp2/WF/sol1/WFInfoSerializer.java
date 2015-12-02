@@ -12,21 +12,30 @@ import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.PrintStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 
 import test.DomParseV;
@@ -40,6 +49,7 @@ public class WFInfoSerializer {
 	private WorkflowMonitor monitor;
 	private DateFormat dateFormat;
 	private Document doc;
+	private Element root;
 	
 	public static final String XML_Declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	public static final String DTD_Declaration = "<!DOCTYPE WorkflowManager SYSTEM \"wfInfo.dtd\" >";
@@ -56,7 +66,16 @@ public class WFInfoSerializer {
 		monitor = WFfactory.newWorkflowMonitor();
 		
 		doc = createDOMDocument();
+		if(doc==null)
+			throw new DOMException((short)13, "It's impossible to create a DOM!");
+
+		//TODO: insert the doctype
 		
+		// Create and append the root element
+		root = (Element) doc.createElement(ROOT_Element);
+		doc.appendChild(root);
+		
+		// This element will help to managing the data format
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
 	}
 	
@@ -70,27 +89,20 @@ public class WFInfoSerializer {
 		}
 		System.out.println("This program will serialize your workflow into an XML file!");
 		
-
-		
 		try { 
 			WFInfoSerializer wf = new WFInfoSerializer();
 			
-			if(wf.doc==null)
-				throw new DOMException((short)13, "It's impossible to create a DOM!");
+			wf.appendWorkflows();
+			//wf.appendProcesses(root);
+			//wf.appendActors(root);
 			
-			// Create and append the root element
-			Element root = (Element) wf.doc.createElement(ROOT_Element);
-			wf.doc.appendChild(root);
-			
-			wf.appendWorkflows(root);
-			wf.appendProcesses(root);
-			wf.appendActors(root);
-			
-			// Print the DOM into an XML file
+			// Print the DOM into an XML file 
 //			fpout.println(XML_Declaration);
 //			fpout.println(DTD_Declaration);
-			wf.printDOM(wf.doc);
-
+			
+			wf.printDOM(System.out);
+			PrintStream fpout = new PrintStream(new File(args[0]));
+			wf.printDOM(fpout);
 
 		} catch (WorkflowMonitorException e) {
 			System.err.println("Could not instantiate the manager class: "+e.getMessage());
@@ -104,6 +116,14 @@ public class WFInfoSerializer {
 			System.err.println("Could not create a DocumentBuilder: "+e.getMessage());
 			e.printStackTrace();
 			System.exit(12);
+		} catch (IOException e) {
+			System.err.println("It's impossible to create the XML file: "+e.getMessage());
+			e.printStackTrace();
+			System.exit(21);
+		} catch (TransformerException e) {
+			System.err.println("There is an error during the creation of the XML file: "+e.getMessage());
+			e.printStackTrace();
+			System.exit(22);
 		}
 		
 		System.out.println("The created file will be validated");
@@ -115,18 +135,25 @@ public class WFInfoSerializer {
 	
 	/**
 	 * This method prints a DOM inside an XML file
-	 * @param doc - The DOM document that you want to write.
+	 * @param out - The name that you want to assign to the DOM document that will be written.
+	 * @throws TransformerException 
 	 */
-	private void printDOM(Document doc) {
-		// TODO Auto-generated method stub
+	private void printDOM(PrintStream out) throws TransformerException {
+		TransformerFactory xformFactory = TransformerFactory.newInstance();
+		Transformer transformer = xformFactory.newTransformer();
 		
+		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		Source input = new DOMSource(this.doc);
+		Result output = new StreamResult(out);
+		
+		transformer.transform (input, output);		//the XML file was created
 	}
 
 	/**
 	 * This method appends the information related to the workflows to a DOM structure.
 	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendWorkflows(Element root) {	//TODO: maybe is finished
+	private void appendWorkflows() {	//TODO: maybe is finished
 				
 		// Get the list of workflows
 		Set<WorkflowReader> WorkFlows = monitor.getWorkflows();
@@ -158,17 +185,13 @@ public class WFInfoSerializer {
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
 					
-					Iterator<ActionReader> it = setNext.iterator();
-					while(it.hasNext()) {
-						String attributes;
-						if( subAction.hasAttributes() ){
-							attributes = subAction.getAttribute("nextActions");
-							attributes += " "+wfName+"_"+it.next().getName();
+					if( !setNext.isEmpty() ) {
+						StringBuffer attributes = new StringBuffer();
+						for(ActionReader a : setNext) {
+							attributes.append( wfName+"_"+a.getName() );
 						}
-						else{
-							attributes = wfName+"_"+it.next().getName();
-						}
-						subAction.setAttribute("nextActions", attributes);					
+						
+						subAction.setAttribute("nextActions", attributes.toString().trim());
 					}
 				}
 				else if (ar instanceof ProcessActionReader) {
@@ -193,7 +216,7 @@ public class WFInfoSerializer {
 	 * This method appends the information related to the processes to a DOM structure.
 	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendProcesses(Element root) {		//TODO: this method should be re-implemented
+	private void appendProcesses() {		//TODO: this method should be re-implemented
 		int code = 1;
 		
 		// For each process print related data
@@ -239,7 +262,7 @@ public class WFInfoSerializer {
 	 * This method appends the information related to the actors that develop the processes to a DOM structure.
 	 * @param root - The root of the DOM document that you want to write.
 	 */
-	private void appendActors(Element root) {				//TODO: this method should be re-implemented
+	private void appendActors() {				//TODO: this method should be re-implemented
 		Set<Actor> actors = new HashSet<Actor>();
 //		root.println("\t<actors>");
 		

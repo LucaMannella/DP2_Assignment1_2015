@@ -7,15 +7,20 @@ package test;
 public class Prova {
 
 	public static void main(String[] args) {
-		String banana= new String();
-		String ciao="ciao";
-		banana+=ciao;
-		System.err.println(banana+"\n");
+		provaStringSte();
+		prova01();
 		
 		return;
 	}
 	
-	private void prova01() {
+	private static void provaStringSte() {
+		String banana= new String();
+		String ciao = "Ciao";
+		banana+=" "+ciao;
+		System.err.println(banana+"\n");
+	}
+	
+	private static void prova01() {
 		String wfrName = "MyWorkFlow1";
 		String aName = "MyAction1";
 		String role = "MyRole1";
