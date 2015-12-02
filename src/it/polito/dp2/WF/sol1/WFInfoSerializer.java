@@ -68,8 +68,6 @@ public class WFInfoSerializer {
 		doc = createDOMDocument();
 		if(doc==null)
 			throw new DOMException((short)13, "It's impossible to create a DOM!");
-
-		//TODO: insert the doctype
 		
 		// Create and append the root element
 		root = (Element) doc.createElement(ROOT_Element);
@@ -93,7 +91,7 @@ public class WFInfoSerializer {
 			WFInfoSerializer wf = new WFInfoSerializer();
 			
 			wf.appendWorkflows();
-			//wf.appendProcesses(root);
+			wf.appendProcesses();
 			//wf.appendActors(root);
 			
 			// Print the DOM into an XML file 
@@ -125,9 +123,10 @@ public class WFInfoSerializer {
 			e.printStackTrace();
 			System.exit(22);
 		}
-		
+		/*
 		System.out.println("The created file will be validated");
 		DomParseV.main(args);
+		*/
 		System.out.println("The parsing was completed!");
 		return;
 	}
@@ -142,7 +141,11 @@ public class WFInfoSerializer {
 		TransformerFactory xformFactory = TransformerFactory.newInstance();
 		Transformer transformer = xformFactory.newTransformer();
 		
+		DocumentType docType = doc.getImplementation().createDocumentType("body", "SYSTEM", "wfInfo.dtd");
+		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, docType.getSystemId());
+		
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
 		Source input = new DOMSource(this.doc);
 		Result output = new StreamResult(out);
 		
@@ -150,10 +153,9 @@ public class WFInfoSerializer {
 	}
 
 	/**
-	 * This method appends the information related to the workflows to a DOM structure.
-	 * @param root - The root of the DOM document that you want to write.
+	 * This method appends the information related to the workflows to the DOM structure of the class.
 	 */
-	private void appendWorkflows() {	//TODO: maybe is finished
+	private void appendWorkflows() {
 				
 		// Get the list of workflows
 		Set<WorkflowReader> WorkFlows = monitor.getWorkflows();
@@ -188,7 +190,7 @@ public class WFInfoSerializer {
 					if( !setNext.isEmpty() ) {
 						StringBuffer attributes = new StringBuffer();
 						for(ActionReader a : setNext) {
-							attributes.append( wfName+"_"+a.getName() );
+							attributes.append( wfName+"_"+a.getName()+" " );
 						}
 						
 						subAction.setAttribute("nextActions", attributes.toString().trim());
@@ -213,54 +215,58 @@ public class WFInfoSerializer {
 	}
 
 	/**
-	 * This method appends the information related to the processes to a DOM structure.
-	 * @param root - The root of the DOM document that you want to write.
+	 * This method appends the information related to the processes to the DOM structure of the class.
 	 */
-	private void appendProcesses() {		//TODO: this method should be re-implemented
+	private void appendProcesses() {		//TODO: this method should be tested
 		int code = 1;
 		
 		// For each process print related data
 		Set<ProcessReader> Processes = monitor.getProcesses();
 		
-		for (ProcessReader wfr: Processes) {
-			String workflow = wfr.getWorkflow().getName();
-			
-			String fields = "code=\"p"+code+"\" "+
-				"started=\""+dateFormat.format(wfr.getStartTime().getTime())+"\" "+
-					"workflow=\""+workflow+"\"";
-			
-//			doc.println("\t<process "+fields+">");			//opening process
-			code++;
-			// example <process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">	//
+		for (ProcessReader pr: Processes) {
+			String startTime = dateFormat.format(pr.getStartTime().getTime());
+			String wfName = pr.getWorkflow().getName();
+			// creating a process
+			Element process = doc.createElement("process");
+			// setting its attributes
+			process.setAttribute("code", "p"+code);
+			process.setAttribute("workflow", wfName);
+			process.setAttribute("started", startTime);
 			
 			// For each action print related data
-			List<ActionStatusReader> statusSet = wfr.getStatus();
+			List<ActionStatusReader> statusSet = pr.getStatus();
 			
 			for (ActionStatusReader asr : statusSet) {
-				//<action_status action="NormalSale_GoodsDelivery" actor="Tom_Tomson" timestamp="20/10/15 11:23"/>
-				fields = "action=\""+workflow+"_"+asr.getActionName()+"\" ";
+				Element action = doc.createElement("action_status");
+								
+				action.setAttribute( "action", wfName+"_"+asr.getActionName() );
 				
 				if (asr.isTakenInCharge()) {		//was the action assigned?
-					fields += "actor=\""+asr.getActor().getName().replaceAll(" ", "_")+"\" ";
-					if (asr.isTerminated())			//was the action completed?
-						fields += "timestamp=\""+dateFormat.format(asr.getTerminationTime().getTime())+"\"";
-					else
-						fields += "timestamp=\"Not Finished\"";
+					String actor = asr.getActor().getName().replaceAll(" ", "_");
+					action.setAttribute("actor", actor);
+					if (asr.isTerminated())	{		//was the action completed?
+						String endTime = dateFormat.format( asr.getTerminationTime().getTime() );
+						action.setAttribute("timestamp", endTime);
+					}
+					else {
+						action.setAttribute("timestamp", "Not Finished");
+					}
 				}
 				else
-					fields += "timestamp=\"Not Taken\"";
+					action.setAttribute("timestamp", "Not Taken");
 				
-//				doc.println("\t\t<action_status "+fields+"/>");		//printing the action details
+				process.appendChild(action);		//appending the process
 			}
 			
-//			doc.println("\t</process>");	//closing process
+			root.appendChild(process);		//appending the process
+			code++;
 		}
+		
 		return;
 	}
 
 	/**
-	 * This method appends the information related to the actors that develop the processes to a DOM structure.
-	 * @param root - The root of the DOM document that you want to write.
+	 * This method appends the information related to the actors that develop the processes to the DOM structure of the class. 
 	 */
 	private void appendActors() {				//TODO: this method should be re-implemented
 		Set<Actor> actors = new HashSet<Actor>();
