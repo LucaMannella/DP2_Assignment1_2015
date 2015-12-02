@@ -64,7 +64,7 @@ public class WFInfoSerializer {
 	public static void main(String[] args) {
 		// This class should receive the name of the output file.
 		if(args.length != 1) {
-			System.err.println("Error! Usage: "+args[0]+" <output.xml>");
+			System.err.println("Error! Usage: <program_name> <output.xml>");
 			System.err.println("args.length is equal to "+args.length);
 			return;
 		}
@@ -206,7 +206,7 @@ public class WFInfoSerializer {
 				"started=\""+dateFormat.format(wfr.getStartTime().getTime())+"\" "+
 					"workflow=\""+workflow+"\"";
 			
-			doc.println("\t<process "+fields+">");			//opening process
+//			doc.println("\t<process "+fields+">");			//opening process
 			code++;
 			// example <process code="p1" started="20/10/2015 08:30" workflow="ArticleProduction">	//
 			
@@ -227,10 +227,10 @@ public class WFInfoSerializer {
 				else
 					fields += "timestamp=\"Not Taken\"";
 				
-				doc.println("\t\t<action_status "+fields+"/>");		//printing the action details
+//				doc.println("\t\t<action_status "+fields+"/>");		//printing the action details
 			}
 			
-			doc.println("\t</process>");	//closing process
+//			doc.println("\t</process>");	//closing process
 		}
 		return;
 	}
@@ -241,7 +241,7 @@ public class WFInfoSerializer {
 	 */
 	private void appendActors(Element root) {				//TODO: this method should be re-implemented
 		Set<Actor> actors = new HashSet<Actor>();
-		root.println("\t<actors>");
+//		root.println("\t<actors>");
 		
 		// Taking all the processes
 		Set<ProcessReader> Processes = monitor.getProcesses();
@@ -260,11 +260,11 @@ public class WFInfoSerializer {
 		
 		for (Actor a : actors) {
 			String fields = "name=\""+a.getName().replaceAll(" ", "_")+"\" role=\""+a.getRole()+"\"";
-			root.println("\t\t<actor "+fields+"/>");
+//			root.println("\t\t<actor "+fields+"/>");
 			//example <actor name="John_Doe" role="Journalist"/>
 		}
 		
-		root.println("\t</actors>");
+//		root.println("\t</actors>");
 		return;
 	}
 	
