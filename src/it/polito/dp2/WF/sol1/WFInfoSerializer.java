@@ -119,10 +119,9 @@ public class WFInfoSerializer {
 			e.printStackTrace();
 			System.exit(22);
 		}
-		/*
+
 		System.out.println("The created file will be validated");
 		DomParseV.main(args);
-		*/
 		System.out.println("The parsing was completed!");
 		return;
 	}
