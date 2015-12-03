@@ -16,7 +16,7 @@ public class Prova {
 	private static void provaStringSte() {
 		String banana= new String();
 		String ciao = "Ciao";
-		banana+=" "+ciao;
+		banana+=ciao;
 		System.err.println(banana+"\n");
 	}
 	
@@ -31,8 +31,7 @@ public class Prova {
 		
 		System.out.println("<WorkflowManager>");
 		System.out.println("\t<workflow name=\""+wfrName+"\">");
-		System.out.println("\t\t<action "+fields+">");
-		System.out.println("\t\t</action>");
+		System.out.println("\t\t<action "+fields+" />");
 		System.out.println("\t</workflow>");
 		System.out.println("</WorkflowManager>");
 	}
