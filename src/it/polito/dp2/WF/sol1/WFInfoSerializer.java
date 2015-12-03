@@ -94,7 +94,7 @@ public class WFInfoSerializer {
 			wf.appendProcesses();
 			wf.appendActors();
 			
-			wf.printDOM(System.out);
+			wf.printDOM(System.err);
 			PrintStream fpout = new PrintStream(new File(args[0]));
 			wf.printDOM(fpout);
 
@@ -169,11 +169,17 @@ public class WFInfoSerializer {
 			{
 				String aName = ar.getName();						//taking action name
 				String id = wfName+"_"+aName;						//building the ID
+				String automInst;
+				if( ar.isAutomaticallyInstantiated() )
+					automInst = "true";
+				else
+					automInst = "false";
 				//creating an action to append to the related workflow
 				Element action = doc.createElement("action");
 				action.setAttribute("name", aName);
 				action.setAttribute("id", id);
 				action.setAttribute("role", ar.getRole());
+				action.setAttribute("automInst", automInst);
 				
 				Element subAction;
 				if (ar instanceof SimpleActionReader) {

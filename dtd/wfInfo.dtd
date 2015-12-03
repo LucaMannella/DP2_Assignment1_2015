@@ -10,7 +10,8 @@
 <!ATTLIST action
 	id ID #REQUIRED
 	name CDATA #REQUIRED
-	role CDATA #REQUIRED	>
+	role CDATA #REQUIRED
+	automInst (true|false) "false"	>
 	
 <!ELEMENT simple_action EMPTY >
 <!ATTLIST simple_action
