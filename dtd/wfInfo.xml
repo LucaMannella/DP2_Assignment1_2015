@@ -5,52 +5,52 @@
 <WorkflowManager>
 
 	<workflow name="ArticleProduction">
-		<action id="ArticleProduction_Writing" name="Writing" role="Journalist">
+		<action id="ArticleProduction_Writing" name="Writing" role="Journalist" automInst="true">
 			<simple_action nextActions="ArticleProduction_Checking" />
 		</action>
-		<action id="ArticleProduction_Checking" name="Checking" role="Editor">
+		<action id="ArticleProduction_Checking" name="Checking" role="Editor" automInst="false">
 			<simple_action nextActions="ArticleProduction_Revising ArticleProduction_Publication" />
 		</action>
-		<action id="ArticleProduction_Revising" name="Revising" role="Journalist">
+		<action id="ArticleProduction_Revising" name="Revising" role="Journalist" automInst="false">
 			<simple_action nextActions="ArticleProduction_Checking" />
 		</action>
-		<action id="ArticleProduction_Publication" name="Publication" role="Editor">
+		<action id="ArticleProduction_Publication" name="Publication" role="Editor" automInst="false">
 			<simple_action />
 		</action>
 	</workflow>
 	
 	<workflow name="SaleManagement">
-		<action id="SaleManagement_AcceptOrder" name="AcceptOrder" role="Salesman">
+		<action id="SaleManagement_AcceptOrder" name="AcceptOrder" role="Salesman" automInst="true">
 			<simple_action nextActions="SaleManagement_NormalSale SaleManagement_PrepaidSale" />
 		</action>
-		<action id="SaleManagement_NormalSale" name="NormalSale" role="SalesManager">
+		<action id="SaleManagement_NormalSale" name="NormalSale" role="SalesManager" automInst="false">
 			<process_action nextProcess="NormalSale" />
 		</action>
-		<action id="SaleManagement_PrepaidSale" name="PrepaidSale" role="SalesManager">
+		<action id="SaleManagement_PrepaidSale" name="PrepaidSale" role="SalesManager" automInst="false">
 			<process_action nextProcess="PrepaidSale" />
 		</action>
 	</workflow>
 	
 	<workflow name="NormalSale">
-		<action id="NormalSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman">
+		<action id="NormalSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman" automInst="true">
 			<simple_action />
 		</action>
-		<action id="NormalSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman">
+		<action id="NormalSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman" automInst="true">
 			<simple_action nextActions="NormalSale_PaymentRec" />
 		</action>
-		<action id="NormalSale_PaymentRec" name="PaymentRec" role="Accountingman">
+		<action id="NormalSale_PaymentRec" name="PaymentRec" role="Accountingman" automInst="false">
 			<simple_action />
 		</action>
 	</workflow>
 	
 	<workflow name="PrepaidSale">
-		<action id="PrepaidSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman">
+		<action id="PrepaidSale_InvoiceIssuance" name="InvoiceIssuance" role="Accountingman" automInst="true">
 			<simple_action nextActions="PrepaidSale_PaymentRec" />
 		</action>
-		<action id="PrepaidSale_PaymentRec" name="PaymentRec" role="Accountingman">
+		<action id="PrepaidSale_PaymentRec" name="PaymentRec" role="Accountingman" automInst="false">
 			<simple_action nextActions="PrepaidSale_GoodsDelivery" />
 		</action>
-		<action id="PrepaidSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman">
+		<action id="PrepaidSale_GoodsDelivery" name="GoodsDelivery" role="Warehouseman" automInst="false">
 			<simple_action />
 		</action>
 	</workflow>
