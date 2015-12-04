@@ -1,17 +1,5 @@
 package it.polito.dp2.WF.sol1;
 
-import it.polito.dp2.WF.ActionReader;
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.Actor;
-import it.polito.dp2.WF.FactoryConfigurationError;
-import it.polito.dp2.WF.ProcessActionReader;
-import it.polito.dp2.WF.ProcessReader;
-import it.polito.dp2.WF.SimpleActionReader;
-import it.polito.dp2.WF.WorkflowMonitor;
-import it.polito.dp2.WF.WorkflowMonitorException;
-import it.polito.dp2.WF.WorkflowMonitorFactory;
-import it.polito.dp2.WF.WorkflowReader;
-
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,8 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
@@ -35,10 +21,21 @@ import javax.xml.transform.stream.StreamResult;
 
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
-import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 
-import test.DomParseV;
+import it.polito.dp2.WF.ActionReader;
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.FactoryConfigurationError;
+import it.polito.dp2.WF.ProcessActionReader;
+import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.SimpleActionReader;
+import it.polito.dp2.WF.WorkflowMonitor;
+import it.polito.dp2.WF.WorkflowMonitorException;
+import it.polito.dp2.WF.WorkflowMonitorFactory;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.DomParseV;
+import it.polito.dp2.WF.util.DomUtil;
 
 /**
  * This class serialize a Workflow into an XML file.
@@ -65,7 +62,7 @@ public class WFInfoSerializer {
 		WorkflowMonitorFactory WFfactory = WorkflowMonitorFactory.newInstance();
 		monitor = WFfactory.newWorkflowMonitor();
 		
-		doc = createDOMDocument();
+		doc = DomUtil.createDOMDocument(false);
 		if(doc==null)
 			throw new DOMException((short)13, "It's impossible to create a DOM!");
 		
@@ -94,7 +91,7 @@ public class WFInfoSerializer {
 			wf.appendProcesses();
 			wf.appendActors();
 			
-			wf.printDOM(System.err);
+			wf.printDOM(System.out);
 			PrintStream fpout = new PrintStream(new File(args[0]));
 			wf.printDOM(fpout);
 
@@ -305,14 +302,4 @@ public class WFInfoSerializer {
 		return;
 	}
 	
-	/**  
-	 * This method create a DOM Document object.
-	 * @return	- The DOM Document
-	 * @throws ParserConfigurationException 
-	 */
-	private Document createDOMDocument() throws ParserConfigurationException {
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-		DocumentBuilder builder = factory.newDocumentBuilder();
-		return builder.newDocument();
-	}
 }

@@ -20,7 +20,7 @@ import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
-import test.DomParseV;
+import it.polito.dp2.WF.util.DomParseV;
 
 /**
  * This class serialize a Workflow into an XML file.
