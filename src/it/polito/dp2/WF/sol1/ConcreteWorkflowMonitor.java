@@ -5,9 +5,9 @@ import java.util.Set;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
 
-public class MyWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
+public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
 	
-	public MyWorkflowMonitor() {
+	public ConcreteWorkflowMonitor() {
 		// TODO Auto-generated constructor stub
 		super();
 	}
