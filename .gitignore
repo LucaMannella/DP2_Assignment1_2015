@@ -14,6 +14,8 @@ hs_err_pid*
 #eclipse files
 .classpath
 .project
+#IntelliJ Idea files
+.idea
 
 #application's output files
 /dtd/output.xml
