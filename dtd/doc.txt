@@ -25,5 +25,5 @@ An action_status status has a pointer (IDREF) to the relative "action", another 
 
 
 The last element of the "WorkflowManager" is the element "actors" that is a container for all the elements "actor".
-
 An "actor" is characterized by a name, which uniquely identifies it (ID), and a role that is simply a string (CDATA).
+I choose to represent also the "actors" like entities because I think that could be a good way for having a program easy to extend to new features.

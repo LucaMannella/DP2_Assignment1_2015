@@ -136,16 +136,21 @@ public class WFInfoSerializer {
 		TransformerFactory xformFactory = TransformerFactory.newInstance();
 		Transformer transformer = xformFactory.newTransformer();
 		
-		DocumentType docType = doc.getImplementation().createDocumentType("body", "SYSTEM", "wfInfo.dtd");
-		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, docType.getSystemId());
-		
+		//set DTD declaration
+		transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, "wfInfo.dtd");
+		//set indentation features
 		transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 		transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
+		
 		Source input = new DOMSource(this.doc);
 		Result output = new StreamResult(out);
 		
 		transformer.transform (input, output);		//the XML file was created
+		return;
 	}
+	//another way for setting the doctype
+	//DocumentType docType = doc.getImplementation().createDocumentType("body", "SYSTEM", "wfInfo.dtd");
+	//transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, docType.getSystemId());
 
 	/**
 	 * This method appends the information related to the workflows to the DOM structure of the class.
