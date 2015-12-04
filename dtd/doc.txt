@@ -1,9 +1,29 @@
 This project was developed by Luca Mannella for the Assignment 1 of the course Distributed Programming II in Politechnic University of Turin.
 
 My DTD is an implementation of a Workflow Management System.
+The root is called "WorkflowManager" it does not have any attribute and it can contains "workflow", "process" and "actors".
+
+
 In our system we have a workflow that is a representation of a set of actions that an actor can perform.
-The workflow is characterized by an ID field called name, which uniquely identifies it, and a set of actions.
-Every action has a name, which must be unique within the workflow, and is associated with a role.
+The "workflow" is characterized by an ID field called name, which uniquely identifies it, and 1 or more "action"s.
+
+Every action has the required actor's role and a name, which must be unique within the workflow. 
+For reach this target I create a CDATA field called name that conains just the name of the action and an ID field composed in this way: "WorkflowName_ActionName".
+In this way I'm able to assign the same name to various action but keeping the name of the action unique inside its workflow.
+
 There are two different types of actions: simple actions and process actions.
-Simple actions have a pointer (IDREFS) to a set of actions that could be performed by the actor that has perform that particular action.
-A process action corresponds to the execution of a whole process; they are characterized by a pointer (IDREF) to the name of the nested workflow that they execute.
+A "simple_action" has a pointer (IDREFS) to a set of actions that could be performed after the end of that particular action.
+A "process_action" corresponds to the execution of a whole process so they are characterized by a pointer (IDREF) to the name of the nested workflow that they will execute.
+
+
+A process is an instance of a particular workflow so it has a pointer (IDREF) to the relative "workflow" entity a CDATA that represents its starting time and an ID which uniquely identifies it.
+Even if this feature is not required by the specification I think that could be usefull for a future expansion of the application.
+
+Every process can contains 1 or more "action_status".
+An action_status is an instance of a particular action contained inside the workflow that is represented by the process to whom this action belongs to.
+An action_status status has a pointer (IDREF) to the relative "action", another pointer (IDREF) to the actor that must complete them (is implied because the action could not be associated to nobody) and a CDATA that could represent the timestamp in which the action was completed or the status "Not Finished" or "Not Taken".
+
+
+The last element of the "WorkflowManager" is the element "actors" that is a container for all the elements "actor".
+
+An "actor" is characterized by a name, which uniquely identifies it (ID), and a role that is simply a string (CDATA).
