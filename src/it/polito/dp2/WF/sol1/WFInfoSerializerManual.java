@@ -43,7 +43,7 @@ public class WFInfoSerializerManual {
 	public WFInfoSerializerManual() throws WorkflowMonitorException {
 		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
 		monitor = factory.newWorkflowMonitor();
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss z");	//z for timezone
 	}
 	
 	/**
@@ -53,7 +53,7 @@ public class WFInfoSerializerManual {
 	public WFInfoSerializerManual(WorkflowMonitor monitor) {
 		super();
 		this.monitor = monitor;
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm");	//z for timezone
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss z");	//z for timezone
 	}
 	
 	public static void main(String[] args) {
