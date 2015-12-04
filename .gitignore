@@ -17,3 +17,5 @@ hs_err_pid*
 
 #application's output files
 /dtd/output.xml
+/build/
+/zip/
