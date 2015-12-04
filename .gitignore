@@ -14,8 +14,10 @@ hs_err_pid*
 #eclipse files
 .classpath
 .project
+
 #IntelliJ Idea files
 .idea
+DP2_Assignment1.iml
 
 #application's output files
 /dtd/output.xml
