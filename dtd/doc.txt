@@ -17,7 +17,7 @@ A "process_action" corresponds to the execution of a whole process so they are c
 
 
 A process is an instance of a particular workflow so it has a pointer (IDREF) to the relative "workflow" entity a CDATA that represents its starting time and an ID which uniquely identifies it.
-Even if this feature is not required by the specification I think that could be usefull for a future expansion of the application.
+Even if this feature is not required by the specification I think that could be usefull for a future expansion of the application (for example could be usefull inside a Database).
 
 Every process can contains 1 or more "action_status".
 An action_status is an instance of a particular action contained inside the workflow that is represented by the process to whom this action belongs to.
