@@ -1,6 +1,7 @@
 package it.polito.dp2.WF.sol1;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,7 +13,7 @@ import it.polito.dp2.WF.WorkflowReader;
 
 public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
 	
-	private HashMap<String,ProcessReader> processes;
+	private HashMap<String, ProcessReader> processes;
 	private HashMap<String, WorkflowReader> workflows;
 
 	//TODO: devo considerare che si possa creare un WorkflowManager vuoto?!
@@ -46,8 +47,10 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		NodeList wfNodes = element.getElementsByTagName("workflow");
 		workflows = new HashMap<String, WorkflowReader>();
 	    for (int i=0; i<wfNodes.getLength(); i++) {
-	    	WorkflowReader wf = new ConcreteWorkflowReader(wfNodes.item(i));
-	    	workflows.put(wf.getName(), wf);
+	    	if(wfNodes.item(i) instanceof Element) {
+	    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
+	    		workflows.put(wf.getName(), wf);
+	    	}
 	    }
 		
 		NodeList procNodes = element.getElementsByTagName("process");
@@ -75,6 +78,22 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	@Override
 	public Set<WorkflowReader> getWorkflows() {	//TODO: test this method
 		return new TreeSet<WorkflowReader>(workflows.values());
+	}
+	
+	public String toString(){
+		StringBuffer buf = new StringBuffer("Inside this WorkflowMonitor there are:\n");
+		
+		buf.append("\tWorkflows:\n");
+		for(WorkflowReader wfr : workflows.values()){
+			buf.append("\t\t"+wfr.toString()+"\n");
+		}
+		
+		buf.append("\tProcesses:\n");
+		for(ProcessReader pr : processes.values()){
+			buf.append("\t\t"+pr.toString()+"\n");
+		}
+		
+		return buf.toString();
 	}
 
 }

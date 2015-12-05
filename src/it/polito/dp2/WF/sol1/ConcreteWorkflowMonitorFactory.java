@@ -18,5 +18,9 @@ public class ConcreteWorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMon
 		WorkflowMonitor myMonitor = new ConcreteWorkflowMonitor();
 		return myMonitor;
 	}
+	
+	public String toString(){
+		return "This is a custom WorkflowMonitorFactory implementation.";
+	}
 
 }
