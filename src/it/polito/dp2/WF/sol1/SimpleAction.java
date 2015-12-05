@@ -8,7 +8,8 @@ public class SimpleAction extends ConcreteActionReader {
 
 	public SimpleAction(Element action, WorkflowReader workflow) {
 		super(action, workflow);
-		// TODO Auto-generated constructor stub
+		
+		Element simpleAction = (Element) action.getElementsByTagName("simple_action").item(0);
 	}
 
 }

@@ -9,7 +9,7 @@ import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
 
-public class ConcreteProcessReader implements ProcessReader {
+public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessReader> {
 
 	public ConcreteProcessReader(Node item) {
 		// TODO Auto-generated constructor stub
@@ -31,6 +31,12 @@ public class ConcreteProcessReader implements ProcessReader {
 	public WorkflowReader getWorkflow() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int compareTo(ProcessReader o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

@@ -83,17 +83,47 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	public String toString(){
 		StringBuffer buf = new StringBuffer("Inside this WorkflowMonitor there are:\n");
 		
-		buf.append("\tWorkflows:\n");
-		for(WorkflowReader wfr : workflows.values()){
-			buf.append("\t\t"+wfr.toString()+"\n");
+		if(workflows==null)
+			buf.append("\tNo Workflows\n");
+		else {
+			buf.append("\tWorkflows:\n");
+			for(WorkflowReader wfr : workflows.values())
+				buf.append("\t\t"+wfr.toString()+"\n");
 		}
 		
-		buf.append("\tProcesses:\n");
-		for(ProcessReader pr : processes.values()){
-			buf.append("\t\t"+pr.toString()+"\n");
+		if(processes==null)
+			buf.append("\tNo Processes\n");
+		else {
+			buf.append("\tProcesses:\n");
+			for(ProcessReader pr : processes.values())
+				buf.append("\t\t"+pr.toString()+"\n");
 		}
-		
 		return buf.toString();
+	}
+	
+	public void setParameter(Element element) {
+		if (element == null)
+    		throw new IllegalArgumentException("Wrong parameter, element was null!");
+    	
+		NodeList wfNodes = element.getElementsByTagName("workflow");
+		workflows = new HashMap<String, WorkflowReader>();
+	    for (int i=0; i<wfNodes.getLength(); i++) {
+	    	if(wfNodes.item(i) instanceof Element) {
+	    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
+	    		workflows.put(wf.getName(), wf);
+	    	}
+	    }
+		
+		NodeList procNodes = element.getElementsByTagName("process");
+		processes = new HashMap<String, ProcessReader>();
+		int code = 1;
+		for (int i=0; i<procNodes.getLength(); i++) {
+	    	ProcessReader proc = new ConcreteProcessReader(wfNodes.item(i));
+	    	processes.put("p"+code, proc);
+	    	code++;
+	    }
+	
+		return;
 	}
 
 }
