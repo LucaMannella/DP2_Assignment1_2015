@@ -1,7 +1,10 @@
 package it.polito.dp2.WF.util;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +24,8 @@ import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
 
+import it.polito.dp2.WF.util.DomUtil;
+
 /**
  * This class will be used for some testing in the first assignment.
  * @author Luca
@@ -28,11 +33,58 @@ import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
 public class Prova {
 
 	public static void main(String[] args) {
-		provaDOM();
+		provaImportCalendar();
 		
 		return;
 	}
 	
+
+	private static void provaImportCalendar() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
+		Calendar startTime = Calendar.getInstance();
+		
+		Document doc = DomUtil.parseDomDocument("dtd/output.xml", true);
+		if(doc == null) {
+			System.err.println("Errore!");
+			System.exit(-1);
+		}
+		
+		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
+		System.out.println("Ho creato la factory: "+factory.toString());
+	
+		try {
+			WorkflowMonitor monitor = factory.newWorkflowMonitor();
+			
+			
+			if(!(monitor instanceof ConcreteWorkflowMonitor)) {
+				System.err.println("Wrong instantiation, I can't proceed!");
+				System.exit(-1);
+			}
+				
+			NodeList lista = doc.getElementsByTagName("WorkflowManager");
+			Element root = (Element)lista.item(0);
+			NodeList workflows = root.getElementsByTagName("workflow");
+			
+			NodeList processes = root.getElementsByTagName("process");
+			for(int i=0; i<processes.getLength(); i++) {
+				Element proc = (Element) processes.item(i);
+				
+				try {
+					startTime.setTime( dateFormat.parse(proc.getAttribute("started")) );
+				} catch (ParseException e) {
+					System.err.println("Error parsing data, current time will be used");
+					startTime.setTime( new Date() );
+				}
+				System.out.println(dateFormat.format(startTime.getTime()));
+			}
+			System.out.println("Fine for");
+		} catch (WorkflowMonitorException e1) {
+			System.err.println("No workflows");
+			e1.printStackTrace();
+		}
+		System.out.println("Fine metodo");
+	}
+
 
 	private static void provaAbstractFactoryPattern() {
 		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
@@ -69,6 +121,11 @@ public class Prova {
 			System.out.println("validation completed");
 			
 			monitor = factory.newWorkflowMonitor();
+			if(!(monitor instanceof ConcreteWorkflowMonitor)) {
+				System.err.println("Wrong instantiation, I can't proceed!");
+				System.exit(-1);
+			}
+				
 			NodeList lista = document.getElementsByTagName("WorkflowManager");
 			Element root = (Element)lista.item(0);
 			((ConcreteWorkflowMonitor) monitor).setParameter(root);

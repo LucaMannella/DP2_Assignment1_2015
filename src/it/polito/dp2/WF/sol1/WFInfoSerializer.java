@@ -62,7 +62,7 @@ public class WFInfoSerializer {
 		WorkflowMonitorFactory WFfactory = WorkflowMonitorFactory.newInstance();
 		monitor = WFfactory.newWorkflowMonitor();
 		
-		doc = DomUtil.createDOMDocument(false);
+		doc = DomUtil.createEmptyDOMDocument(false);
 		if(doc==null)
 			throw new DOMException((short)13, "It's impossible to create a DOM!");
 		

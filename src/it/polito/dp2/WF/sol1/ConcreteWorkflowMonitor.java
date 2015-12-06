@@ -1,7 +1,6 @@
 package it.polito.dp2.WF.sol1;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,13 +11,17 @@ import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
 
 public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
-	
+
 	private HashMap<String, ProcessReader> processes;
 	private HashMap<String, WorkflowReader> workflows;
 
 	//TODO: devo considerare che si possa creare un WorkflowManager vuoto?!
-	public ConcreteWorkflowMonitor() {/*default constructor*/}
-
+	public ConcreteWorkflowMonitor() {/*default constructor*/
+		processes = new HashMap<String, ProcessReader>();
+		workflows = new HashMap<String, WorkflowReader>();
+	}
+	//TODO: nell'implementazione di Sisto viene tutto generato nel costruttore di default 
+	
 	//if I valid the document before creating the element I can assume some stuff
 	public ConcreteWorkflowMonitor(Set<ProcessReader> processes, Set<WorkflowReader> workflows)
 																	throws IllegalArgumentException {
@@ -41,28 +44,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	}
 	
 	public ConcreteWorkflowMonitor(Element element) throws IllegalArgumentException {
-		if (element == null)
-    		throw new IllegalArgumentException("Wrong parameter, element was null!");
-    	
-		NodeList wfNodes = element.getElementsByTagName("workflow");
-		workflows = new HashMap<String, WorkflowReader>();
-	    for (int i=0; i<wfNodes.getLength(); i++) {
-	    	if(wfNodes.item(i) instanceof Element) {
-	    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
-	    		workflows.put(wf.getName(), wf);
-	    	}
-	    }
-		
-		NodeList procNodes = element.getElementsByTagName("process");
-		processes = new HashMap<String, ProcessReader>();
-		int code = 1;
-		for (int i=0; i<procNodes.getLength(); i++) {
-	    	ProcessReader proc = new ConcreteProcessReader(wfNodes.item(i));
-	    	processes.put("p"+code, proc);
-	    	code++;
-	    }
-	
-		return;
+		setParameter(element);
 	}
 
 	@Override
@@ -118,7 +100,9 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		processes = new HashMap<String, ProcessReader>();
 		int code = 1;
 		for (int i=0; i<procNodes.getLength(); i++) {
-	    	ProcessReader proc = new ConcreteProcessReader(wfNodes.item(i));
+			Element e = (Element) wfNodes.item(i);	//ottengo processo i-esimo
+	    	ProcessReader proc = new ConcreteProcessReader( e, workflows.get(e.getAttribute("workflow")) );
+	    	//I should have already the workflow because I read it before and the document should be valid
 	    	processes.put("p"+code, proc);
 	    	code++;
 	    }
