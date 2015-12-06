@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.Actor;
@@ -36,8 +37,22 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			endTime.setTimeInMillis(0);
 		}
 		else {
-			//TODO: come faccio arrivare l'attore?!
-			//this.actor = attore;
+			Element root = (Element) action.getParentNode().getParentNode();
+			NodeList actorsNodes = root.getElementsByTagName("actors");
+			
+			// this loop is executed just one time in this particular application
+			for(int i=0; i<actorsNodes.getLength(); i++) {
+				Element e = (Element) actorsNodes.item(i);
+				NodeList acts = e.getElementsByTagName("actor");
+				for(int j=0; j<acts.getLength(); j++) {
+					Element a = (Element) acts.item(j);
+					if(a.getAttribute("name").equals(actorName)) {
+						this.actor = new Actor(actorName, a.getAttribute("role"));
+						break;
+					}
+				}
+			}
+			
 			takenInCharge = true;
 			
 			if(timestamp.equals("Not Finished")) {
@@ -83,6 +98,21 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 	@Override
 	public boolean isTerminated() {
 		return terminated;
+	}
+	
+	public String toString() {
+		StringBuffer buf = new StringBuffer("Action name: "+this.name);
+		if(takenInCharge) {
+			buf.append(" - taken in charge by: "+actor.getName());
+			if(terminated)
+				buf.append(" - terminated at: "+dateFormat.format(endTime.getTime()));
+			else
+				buf.append(" - not yet terminated");
+		}
+		else
+			buf.append(" - not taken in charge by anyone");
+
+		return buf.toString();
 	}
 
 }
