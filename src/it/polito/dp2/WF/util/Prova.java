@@ -33,11 +33,80 @@ import it.polito.dp2.WF.util.DomUtil;
 public class Prova {
 
 	public static void main(String[] args) {
-		provaImportCalendar();
-		
+		provaRemoveWFName();
 		return;
 	}
 	
+
+	private static void provaRemoveWFName() {
+		String id = "Article_Production_Writing_News";
+		String wfName = "Article_Production";
+		
+		String name = id.replace(wfName+"_", "");
+		System.out.println("Il nome dell'azione è: "+name);
+		return;
+	}
+
+
+	private static void provaActorsInsideASR() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
+		Calendar startTime = Calendar.getInstance();
+		
+		Document doc = DomUtil.parseDomDocument("dtd/output.xml", true);
+		if(doc == null) {
+			System.err.println("Errore!");
+			System.exit(-1);
+		}
+		
+		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
+		System.out.println("Ho creato la factory: "+factory.toString());
+	
+		try {
+			WorkflowMonitor monitor = factory.newWorkflowMonitor();
+						
+			if(!(monitor instanceof ConcreteWorkflowMonitor)) {
+				System.err.println("Wrong instantiation, I can't proceed!");
+				System.exit(-1);
+			}
+				
+			NodeList lista = doc.getElementsByTagName("WorkflowManager");
+			Element root = (Element)lista.item(0);
+						
+			NodeList processes = root.getElementsByTagName("process");
+			for(int i=0; i<processes.getLength(); i++) {
+				Element proc = (Element) processes.item(i);
+				
+				NodeList actions = proc.getElementsByTagName("action_status");
+				for(int j=0; j< actions.getLength(); j++) {
+					Element act = (Element) actions.item(j);
+					
+					if( act.getAttribute("actor")==null )
+						System.out.println(proc.getAttribute("workflow")
+								+" - "+act.getAttribute("action")
+								+" - Qui c'è un attore NULL!!!");
+					else if( act.getAttribute("actor").equals("") )
+						System.out.println(proc.getAttribute("workflow")
+								+" - "+act.getAttribute("action")
+								+" - Qui c'è un attore vuoto!!!");
+					else
+						System.out.println(act.getAttribute("actor"));
+				}
+				try {
+					startTime.setTime( dateFormat.parse(proc.getAttribute("started")) );
+				} catch (ParseException e) {
+					System.err.println("Error parsing data, current time will be used");
+					startTime.setTime( new Date() );
+				}
+				System.out.println("Fine for interno "+i);
+			}
+			System.out.println("- Fine for esterno -");
+		} catch (WorkflowMonitorException e1) {
+			System.err.println("No workflows");
+			e1.printStackTrace();
+		}
+		System.out.println("Fine metodo");
+	}
+
 
 	private static void provaImportCalendar() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
