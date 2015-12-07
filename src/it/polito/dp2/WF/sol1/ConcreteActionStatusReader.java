@@ -31,7 +31,8 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 	public ConcreteActionStatusReader(Element action, String wfName) {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		endTime = Calendar.getInstance();
-		
+
+//TODO:	if((action == null) || (wfName == null)) return;	//safety lock
 		String name = action.getAttribute( WFAttributes.ACTION_STATUS_NAME );		//"action"
 		this.name = name.replace(wfName+"_", "");
 		
@@ -49,6 +50,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );
 			
 			// this loop is executed just one time in this particular application
+			actor = null;
 			for(int i=0; i<actorsNodes.getLength(); i++) {
 				Element e = (Element) actorsNodes.item(i);
 				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );
@@ -60,6 +62,8 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 					}
 				}
 			}
+			if(actor == null)
+				System.err.println("The actor is still null... Something wrong in the document!");
 			
 			takenInCharge = true;
 			

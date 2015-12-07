@@ -30,10 +30,14 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 	private List<ActionStatusReader> actionStatus;
 	
 	public ConcreteProcessReader(Element proc, WorkflowReader workflow) {
-		this.workflow = workflow;
-		
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();
+		
+//TODO:	if(workflow == null) return;	//safety lock
+		this.workflow = workflow;
+		
+//TODO:	if(proc == null) return;	//safety lock
+		/* Calendar startTime creation */
 		try {
 			String s = proc.getAttribute("started");
 			System.out.println("DEBUG - la stringa recuperata è: "+s.toString());
@@ -46,7 +50,8 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 			startTime.setTime( new Date() );
 		}
 		
-		NodeList actionNodes = proc.getElementsByTagName( WFElements.ACTION_STATUS );	//("action_status")
+		/* ActionStatus list creation */
+		NodeList actionNodes = proc.getElementsByTagName( WFElements.ACTION_STATUS );	//"action_status"
 		actionStatus = new ArrayList<ActionStatusReader>();
 		for (int i=0; i<actionNodes.getLength(); i++) {
 	    	ActionStatusReader asr = new ConcreteActionStatusReader( (Element) actionNodes.item(i), workflow.getName() );

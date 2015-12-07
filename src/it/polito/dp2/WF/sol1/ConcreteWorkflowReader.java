@@ -50,6 +50,7 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		}
 		
 //TODO:	if(procNodes == null) return;		//safety lock 
+		// set the processes that refer this Workflow
 		for(int i=0; i<procNodes.getLength(); i++) {
 			if(procNodes.item(i) instanceof Element) {
 				Element e = (Element) procNodes.item(i);

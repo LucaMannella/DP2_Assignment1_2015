@@ -114,7 +114,7 @@ public class Prova {
 			Map<String, WorkflowReader>workflows = new HashMap<String, WorkflowReader>();
 		    for (int i=0; i<wfNodes.getLength(); i++) {
 		    	if(wfNodes.item(i) instanceof Element) {
-		    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
+		    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i), wfProc);
 		    		workflows.put(wf.getName(), wf);
 		    		System.out.println("Elemento "+i+" aggiunto!");
 		    	}

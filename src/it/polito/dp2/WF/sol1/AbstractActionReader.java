@@ -22,8 +22,8 @@ public abstract class AbstractActionReader implements ActionReader {
 	private WorkflowReader parent;
 
 	public AbstractActionReader(Element action, WorkflowReader parent) {
-		this.name = action.getAttribute( WFAttributes.ACTION_NAME );					//"name"
-		this.role = action.getAttribute( WFAttributes.ACTION_ROLE );					//"role"
+		this.name = action.getAttribute( WFAttributes.ACTION_NAME );				//"name"
+		this.role = action.getAttribute( WFAttributes.ACTION_ROLE );				//"role"
 		
 		String isAuto = action.getAttribute( WFAttributes.ACTION_INSTANTIATION );	//"automInst"
 		if( isAuto.equalsIgnoreCase("true") )
