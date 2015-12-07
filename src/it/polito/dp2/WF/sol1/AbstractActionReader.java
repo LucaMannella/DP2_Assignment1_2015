@@ -6,14 +6,22 @@ import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.util.WFAttributes;
 
-public abstract class ConcreteActionReader implements ActionReader {
+/**
+ * This is an abstract implementation of the interface ActionReader.<BR>
+ * If you want to use that class you have to instantiate one of the following implementation.<BR>
+ * {@link it.polito.dp2.WF.sol1.SimpleAction}<BR>{@link it.polito.dp2.WF.sol1.ProcessAction}<BR><BR>
+ * If you want more detail about the interface look to {@link it.polito.dp2.WF.ActionReader}
+ * 
+ * @author Luca
+ */
+public abstract class AbstractActionReader implements ActionReader {
 
 	private String name;
 	private String role;
 	private boolean automInst;
 	private WorkflowReader parent;
 
-	public ConcreteActionReader(Element action, WorkflowReader parent) {
+	public AbstractActionReader(Element action, WorkflowReader parent) {
 		this.name = action.getAttribute( WFAttributes.ACTION_NAME );					//"name"
 		this.role = action.getAttribute( WFAttributes.ACTION_ROLE );					//"role"
 		
