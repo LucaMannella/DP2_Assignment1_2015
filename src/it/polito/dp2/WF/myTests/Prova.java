@@ -1,4 +1,4 @@
-package it.polito.dp2.WF.util;
+package it.polito.dp2.WF.myTests;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -26,6 +26,8 @@ import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
 import it.polito.dp2.WF.util.DomUtil;
+import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.util.WFAttributesEnum;
 
 /**
  * This class will be used for some testing in the first assignment.
@@ -34,8 +36,8 @@ import it.polito.dp2.WF.util.DomUtil;
 public class Prova {
 
 	public static void main(String[] args) {
-		provaEnumKeywords();
-//		provaDOM();
+//		provaEnumKeywords();
+		provaDOM();
 //		provaRemoveWFName();
 //		provaActorsInsideASR();
 //		provaImportCalendar();
@@ -46,24 +48,16 @@ public class Prova {
 	}
 	
 
-	private static void provaEnumKeywords() {
-		System.out.println("Stampo il contenuto dell'Enum WFElements!");
-		int i=1;
-		for( WFElements e1 : WFElements.values() ) {
-			System.out.println("Keyword "+i+": "+e1);						//equivalente a scrivere e1.toString();
-			//System.out.println("toString method: "+e1.toString());		//può essere ridefinito
-			//System.out.println("name method: "+e1.name()+"\n");			//stampa esattamente il valore della keyword
-			i++;
-		}
+	public static void provaEnumKeywords() {
 		System.out.println("Prova di assegnazione");
-		WFElements e = WFElements.valueOf("WorkflowManager");
+		WFAttributesEnum e = WFAttributesEnum.valueOf("name");
 		System.out.println("Ho generato l'elemento: "+e);
-//		e = WFElements.valueOf("WorkFlowManager");			//genera una IllegalArgumentException
-//		System.out.println("Ho generato un errore: "+e);	//unreachable code
+//		e = WFElements.valueOf("WorkFlowManager");				//genera una IllegalArgumentException
+//		System.out.println("Ho generato un errore: "+e);		//unreachable code
 		
 		System.out.println("\n\nStampo il contenuto dell'Enum WFAttributes!");
-		i=1;
-		for( WFAttributes e2 : WFAttributes.values() ) {
+		int i=1;
+		for( WFAttributesEnum e2 : WFAttributesEnum.values() ) {
 			System.out.println("Keyword "+i+": "+e2);				//equivalente a toString();
 			System.out.println("getValue method: "+e2.getValue());
 			System.out.println("name method: "+e2.name()+"\n");		//stampa esattamente il valore della keyword
@@ -148,9 +142,6 @@ public class Prova {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		
-		
-		
 		
 	}
 
