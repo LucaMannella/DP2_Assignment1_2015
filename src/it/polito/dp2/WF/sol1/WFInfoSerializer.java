@@ -36,6 +36,8 @@ import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.util.DomParseV;
 import it.polito.dp2.WF.util.DomUtil;
+import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.util.WFElements;
 
 /**
  * This class serialize a Workflow into an XML file.
@@ -51,7 +53,7 @@ public class WFInfoSerializer {
 	public static final String XML_Declaration = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>";
 	public static final String DTD_Declaration = "<!DOCTYPE WorkflowManager SYSTEM \"wfInfo.dtd\" >";
 	public static final String STYLE_Declaration = "<?xml-stylesheet type=\"text/xsl\" href=\"style.xsl\"?>";
-	public static final String ROOT_Element = "WorkflowManager";
+	public static final String ROOT_Element = WFElements.WorkflowManager.name();
 
 	/**
 	 * Default constructor - Same as WFInfo
@@ -161,8 +163,8 @@ public class WFInfoSerializer {
 		{
 			String wfName = wfr.getName();
 			//creating a workflow with the related name
-			Element workflow = doc.createElement("workflow");
-			workflow.setAttribute("name", wfName);
+			Element workflow = doc.createElement( WFElements.workflow.toString() );
+			workflow.setAttribute(WFAttributes.WORKFLOW_NAME.toString() , wfName);
 	
 			// Get the list of actions
 			Set<ActionReader> Actions = wfr.getActions();
@@ -177,16 +179,16 @@ public class WFInfoSerializer {
 				else
 					automInst = "false";
 				//creating an action to append to the related workflow
-				Element action = doc.createElement("action");
-				action.setAttribute("name", aName);
-				action.setAttribute("id", id);
-				action.setAttribute("role", ar.getRole());
-				action.setAttribute("automInst", automInst);
+				Element action = doc.createElement( WFElements.action.toString() );
+				action.setAttribute( WFAttributes.ACTION_NAME.toString(), aName );
+				action.setAttribute( WFAttributes.ACTION_ID.toString(), id );
+				action.setAttribute( WFAttributes.ACTION_ROLE.toString(), ar.getRole() );
+				action.setAttribute( WFAttributes.ACTION_INSTANTIATION.toString(), automInst );
 				
 				Element subAction;
 				if (ar instanceof SimpleActionReader) {
 					//creating a simple_action
-					subAction = doc.createElement("simple_action");
+					subAction = doc.createElement( WFElements.simple_action.toString() );
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
 					
@@ -196,13 +198,13 @@ public class WFInfoSerializer {
 							attributes.append( wfName+"_"+a.getName()+" " );
 						}
 						
-						subAction.setAttribute("nextActions", attributes.toString().trim());
+						subAction.setAttribute( WFAttributes.ACTION_SIMPLE_NEXT.toString() , attributes.toString().trim() );
 					}
 				}
 				else if (ar instanceof ProcessActionReader) {
 					//creating a process_action
-					subAction = doc.createElement("process_action");
-					subAction.setAttribute( "nextProcess", ((ProcessActionReader)ar).getActionWorkflow().getName() );
+					subAction = doc.createElement( WFElements.process_action.toString() );
+					subAction.setAttribute( WFAttributes.ACTION_PROCESS_NEXT.toString(), ((ProcessActionReader)ar).getActionWorkflow().getName() );
 				}
 				else {
 					//should be tested
@@ -230,33 +232,33 @@ public class WFInfoSerializer {
 			String startTime = dateFormat.format(pr.getStartTime().getTime());
 			String wfName = pr.getWorkflow().getName();
 			// creating a process
-			Element process = doc.createElement("process");
+			Element process = doc.createElement( WFElements.process.toString() );
 			// setting its attributes
-			process.setAttribute("code", "p"+code);
-			process.setAttribute("workflow", wfName);
-			process.setAttribute("started", startTime);
+			process.setAttribute( WFAttributes.PROCESS_CODE.toString(), "p"+code );
+			process.setAttribute( WFAttributes.PROCESS_WFNAME.toString(), wfName );
+			process.setAttribute( WFAttributes.PROCESS_TIME.toString(), startTime);
 			
 			// For each action print related data
 			List<ActionStatusReader> statusSet = pr.getStatus();
 			
 			for (ActionStatusReader asr : statusSet) {
-				Element action = doc.createElement("action_status");
+				Element action = doc.createElement( WFElements.action_status.toString() );
 								
-				action.setAttribute( "action", wfName+"_"+asr.getActionName() );
+				action.setAttribute( WFAttributes.ACTION_STATUS_NAME.toString(), wfName+"_"+asr.getActionName() );
 				
 				if (asr.isTakenInCharge()) {		//was the action assigned?
 					String actor = asr.getActor().getName().replaceAll(" ", "_");
-					action.setAttribute("actor", actor);
+					action.setAttribute( WFAttributes.ACTION_STATUS_ACTOR.toString(), actor );
 					if (asr.isTerminated())	{		//was the action completed?
 						String endTime = dateFormat.format( asr.getTerminationTime().getTime() );
-						action.setAttribute("timestamp", endTime);
+						action.setAttribute( WFAttributes.ACTION_STATUS_TIME.toString(), endTime );
 					}
 					else {
-						action.setAttribute("timestamp", "Not Finished");
+						action.setAttribute( WFAttributes.ACTION_STATUS_TIME.toString(), "Not Finished" );
 					}
 				}
 				else
-					action.setAttribute("timestamp", "Not Taken");
+					action.setAttribute( WFAttributes.ACTION_STATUS_TIME.toString(), "Not Taken" );
 				
 				process.appendChild(action);	//appending the action to the process
 			}
@@ -275,7 +277,7 @@ public class WFInfoSerializer {
 		Set<Actor> actorsSet = new HashSet<Actor>();
 		
 		// creating the actors container
-		Element actors = doc.createElement("actors");
+		Element actors = doc.createElement( WFElements.actors.toString() );
 		
 		// Taking all the processes
 		Set<ProcessReader> Processes = monitor.getProcesses();
@@ -292,9 +294,9 @@ public class WFInfoSerializer {
 		
 		Element actor;
 		for (Actor a : actorsSet) {
-			actor = doc.createElement("actor");
-			actor.setAttribute( "name", a.getName().replaceAll(" ", "_") );
-			actor.setAttribute( "role", a.getRole() );
+			actor = doc.createElement( WFElements.actor.toString() );
+			actor.setAttribute( WFAttributes.ACTOR_NAME.toString(), a.getName().replaceAll(" ", "_") );
+			actor.setAttribute( WFAttributes.ACTOR_ROLE.toString(), a.getRole() );
 			actors.appendChild(actor);		//appending the actor to the set
 		}
 		
