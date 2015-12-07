@@ -14,10 +14,10 @@ public abstract class ConcreteActionReader implements ActionReader {
 	private WorkflowReader parent;
 
 	public ConcreteActionReader(Element action, WorkflowReader parent) {
-		this.name = action.getAttribute( WFAttributes.ACTION_NAME.toString() );					//"name"
-		this.role = action.getAttribute( WFAttributes.ACTION_ROLE.toString() );					//"role"
+		this.name = action.getAttribute( WFAttributes.ACTION_NAME );					//"name"
+		this.role = action.getAttribute( WFAttributes.ACTION_ROLE );					//"role"
 		
-		String isAuto = action.getAttribute( WFAttributes.ACTION_INSTANTIATION.toString() );	//"automInst"
+		String isAuto = action.getAttribute( WFAttributes.ACTION_INSTANTIATION );	//"automInst"
 		if( isAuto.equalsIgnoreCase("true") )
 			this.automInst = true;
 		else

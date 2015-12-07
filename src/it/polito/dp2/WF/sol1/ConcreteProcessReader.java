@@ -40,7 +40,7 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 			startTime.setTime( new Date() );
 		}
 		
-		NodeList actionNodes = proc.getElementsByTagName( WFElements.action_status.toString() );	//("action_status")
+		NodeList actionNodes = proc.getElementsByTagName( WFElements.ACTION_STATUS );	//("action_status")
 		actionStatus = new ArrayList<ActionStatusReader>();
 		for (int i=0; i<actionNodes.getLength(); i++) {
 	    	ActionStatusReader asr = new ConcreteActionStatusReader( (Element) actionNodes.item(i), workflow.getName() );

@@ -21,18 +21,18 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	private Set<ProcessReader> processes;
 
 	public ConcreteWorkflowReader(Element workflow) {
-		this.name = workflow.getAttribute( WFAttributes.WORKFLOW_NAME.toString() );							//"name"
+		this.name = workflow.getAttribute( WFAttributes.WORKFLOW_NAME );							//"name"
 		
 		actions = new HashMap<String, ActionReader>();
 		ActionReader ar;
 		// set the actions inside the object
-		NodeList actionNodes = workflow.getElementsByTagName( WFElements.action.toString() );				//"action"
+		NodeList actionNodes = workflow.getElementsByTagName( WFElements.ACTION );				//"action"
 		
 		for (int i=0; i<actionNodes.getLength(); i++) {
 			if(actionNodes.item(i) instanceof Element) {
 				Element azione = (Element) actionNodes.item(i);
 				
-				if( azione.getElementsByTagName( WFElements.process_action.toString() ).getLength() >= 1 )	//"process_action"
+				if( azione.getElementsByTagName( WFElements.PROCESS_ACTION ).getLength() >= 1 )	//"process_action"
 					ar = new ProcessAction(azione, this);
 				else
 					ar = new SimpleAction(azione, this);				

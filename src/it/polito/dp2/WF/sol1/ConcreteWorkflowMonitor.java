@@ -102,7 +102,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	
 	public void setParameter(Element root) {
 		int i=0;
-		final String WORKFLOW = WFElements.workflow.toString();									//"workflow"
+		final String WORKFLOW = WFElements.WORKFLOW;									//"workflow"
 		if (root == null)
     		throw new IllegalArgumentException("Wrong parameter, element was null!");
     	
@@ -122,7 +122,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		System.out.println("DEBUG - Workflows created");
 		
 		/* processes */
-		NodeList procNodes = root.getElementsByTagName( WFElements.process.toString() );		//"process"
+		NodeList procNodes = root.getElementsByTagName( WFElements.PROCESS );		//"process"
 		System.out.println("DEBUG - In the document there are "+procNodes.getLength()+" processes");
 		int code = 1;
 		for (i=0; i<procNodes.getLength(); i++) {
@@ -140,19 +140,19 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		System.out.println("DEBUG - Processes created");
 		
 		/* actors */	//TODO: update this part if you want to manage more departments		
-		NodeList actorsNodes = root.getElementsByTagName( WFElements.actors.toString() );		//"actors"
+		NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );		//"actors"
 		System.out.println("DEBUG - Number of tag actors: "+actorsNodes.getLength());
 		// this loop is executed just one time in this particular application
 		for(i=0; i<actorsNodes.getLength(); i++) {
 			if(actorsNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
 				Element e = (Element) actorsNodes.item(i);
-				NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );			//"actor"
+				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );			//"actor"
 				System.out.println("DEBUG - Number of actor: "+acts.getLength());
 				for(int j=0; j<acts.getLength(); j++) {
 					if(acts.item(i) instanceof Element) {	//if I don't take an element I ignore it
 						e = (Element) acts.item(j);
-						String name = e.getAttribute( WFAttributes.ACTOR_NAME.toString() );
-						String role = e.getAttribute( WFAttributes.ACTOR_ROLE.toString() );
+						String name = e.getAttribute( WFAttributes.ACTOR_NAME );
+						String role = e.getAttribute( WFAttributes.ACTOR_ROLE );
 						
 						Actor a = new Actor(name, role);						
 						actors.put(a.getName(), a);

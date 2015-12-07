@@ -26,11 +26,11 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		endTime = Calendar.getInstance();
 		
-		String name = action.getAttribute( WFAttributes.ACTION_STATUS_NAME.toString() );		//"action"
+		String name = action.getAttribute( WFAttributes.ACTION_STATUS_NAME );		//"action"
 		this.name = name.replace(wfName+"_", "");
 		
-		String timestamp = action.getAttribute( WFAttributes.ACTION_STATUS_TIME.toString() );	//"timestamp"
-		String actorName = action.getAttribute( WFAttributes.ACTION_STATUS_ACTOR.toString() );	//"actor"
+		String timestamp = action.getAttribute( WFAttributes.ACTION_STATUS_TIME );	//"timestamp"
+		String actorName = action.getAttribute( WFAttributes.ACTION_STATUS_ACTOR );	//"actor"
 		
 		if(actorName.equals("")) {
 			actor = null;
@@ -40,16 +40,16 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		}
 		else {
 			Element root = (Element) action.getParentNode().getParentNode();
-			NodeList actorsNodes = root.getElementsByTagName( WFElements.actors.toString() );
+			NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );
 			
 			// this loop is executed just one time in this particular application
 			for(int i=0; i<actorsNodes.getLength(); i++) {
 				Element e = (Element) actorsNodes.item(i);
-				NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );
+				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );
 				for(int j=0; j<acts.getLength(); j++) {
 					Element a = (Element) acts.item(j);
-					if(a.getAttribute( WFAttributes.ACTOR_NAME.toString() ).equals(actorName)) {
-						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE.toString() ));
+					if(a.getAttribute( WFAttributes.ACTOR_NAME ).equals(actorName)) {
+						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE ));
 						break;
 					}
 				}
@@ -57,7 +57,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			
 			takenInCharge = true;
 			
-			if(timestamp.equals( WFAttributes.STATUS_NOT_FINISHED.toString() )) {	//if (timestamp=="Not Finished")
+			if(timestamp.equals( WFAttributes.STATUS_NOT_FINISHED )) {	//if (timestamp=="Not Finished")
 				terminated = false;
 				endTime.setTimeInMillis(0);
 			}
