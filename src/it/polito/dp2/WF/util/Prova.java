@@ -25,7 +25,6 @@ import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
 import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
-
 import it.polito.dp2.WF.util.DomUtil;
 
 /**
@@ -35,13 +34,128 @@ import it.polito.dp2.WF.util.DomUtil;
 public class Prova {
 
 	public static void main(String[] args) {
-		provaRemoveWFName();
-		provaDOM();
+		provaEnumKeywords();
+//		provaDOM();
+//		provaRemoveWFName();
+//		provaActorsInsideASR();
+//		provaImportCalendar();
+//		provaAbstractFactoryPattern();
+//		provaStringSte();
+//		prova01();
 		return;
 	}
 	
 
-	private static void provaRemoveWFName() {
+	private static void provaEnumKeywords() {
+		System.out.println("Stampo il contenuto dell'Enum WFElements!");
+		int i=1;
+		for( WFElements e1 : WFElements.values() ) {
+			System.out.println("Keyword "+i+": "+e1);						//equivalente a scrivere e1.toString();
+			//System.out.println("toString method: "+e1.toString());		//può essere ridefinito
+			//System.out.println("name method: "+e1.name()+"\n");			//stampa esattamente il valore della keyword
+			i++;
+		}
+		System.out.println("Prova di assegnazione");
+		WFElements e = WFElements.valueOf("WorkflowManager");
+		System.out.println("Ho generato l'elemento: "+e);
+//		e = WFElements.valueOf("WorkFlowManager");			//genera una IllegalArgumentException
+//		System.out.println("Ho generato un errore: "+e);	//unreachable code
+		
+		System.out.println("\n\nStampo il contenuto dell'Enum WFAttributes!");
+		i=1;
+		for( WFAttributes e2 : WFAttributes.values() ) {
+			System.out.println("Keyword "+i+": "+e2);				//equivalente a toString();
+			System.out.println("getValue method: "+e2.getValue());
+			System.out.println("name method: "+e2.name()+"\n");		//stampa esattamente il valore della keyword
+			i++;
+		}
+	}
+
+
+	public static void provaDOM() {
+		// This element will help to managing the data format
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
+		
+		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
+		System.out.println("Ho creato la factory: "+factory.toString());
+				
+		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
+		documentFactory.setValidating(true);
+		System.out.println("Ho creato la document factory");
+	
+		WorkflowMonitor monitor;
+		DocumentBuilder builder;
+		Document document;
+		try {
+			builder = documentFactory.newDocumentBuilder();
+			document = builder.parse("dtd/output.xml");
+			System.out.println("validation completed");
+			
+			monitor = factory.newWorkflowMonitor();
+			if(!(monitor instanceof ConcreteWorkflowMonitor)) {
+				System.err.println("Wrong instantiation, I can't proceed!");
+				System.exit(-1);
+			}
+			else
+				System.out.println("I have the right WorkflowMonitor!");
+				
+			NodeList lista = document.getElementsByTagName("WorkflowManager");
+			Element root = (Element)lista.item(0);
+			((ConcreteWorkflowMonitor) monitor).setParameter(root);
+			System.out.println("Ho creato il mio monitor:\n"+monitor.toString());
+			
+			
+			System.out.println("C'è "+lista.getLength()+" elemento chiamato WorkflowManager");
+			
+			NodeList wfNodes = root.getElementsByTagName("workflow");
+			System.out.println("Ci sono "+wfNodes.getLength()+" elementi chiamati workflow");
+			
+			NodeList wfProc = root.getElementsByTagName("process");
+			System.out.println("Ci sono "+wfProc.getLength()+" elementi chiamati process");
+			
+			WorkflowMonitor wfMonitor = new ConcreteWorkflowMonitor(root);
+			System.out.println("Nel mio oggetto ci sono: "+wfMonitor.getWorkflows().size()+" workflows");
+			System.out.println("Nel mio oggetto ci sono: "+wfMonitor.getProcesses().size()+" processi");
+			
+			Map<String, WorkflowReader>workflows = new HashMap<String, WorkflowReader>();
+		    for (int i=0; i<wfNodes.getLength(); i++) {
+		    	if(wfNodes.item(i) instanceof Element) {
+		    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
+		    		workflows.put(wf.getName(), wf);
+		    		System.out.println("Elemento "+i+" aggiunto!");
+		    	}
+		    	else
+		    		System.err.println("Banana!!!");
+		    }
+		    
+		    for(ProcessReader pr : wfMonitor.getProcesses()) {
+		    	for(ActionStatusReader asr : pr.getStatus()) {
+		    		asr.toString();
+		    	}
+		    }
+			
+		} catch (WorkflowMonitorException e) {
+			System.err.println("Non sono riuscito a creare il workflow monitor: "+e.getMessage());
+			e.printStackTrace();
+			System.exit(-1);
+		} catch (ParserConfigurationException e) {
+			System.err.println("Error creating the DocumentBuilder!");
+			e.printStackTrace();
+		} catch (SAXException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} catch (IOException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+	}
+
+
+	public static void provaRemoveWFName() {
 		String id = "Article_Production_Writing_News";
 		String wfName = "Article_Production";
 		
@@ -51,7 +165,7 @@ public class Prova {
 	}
 
 
-	private static void provaActorsInsideASR() {
+	public static void provaActorsInsideASR() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		Calendar startTime = Calendar.getInstance();
 		
@@ -111,7 +225,7 @@ public class Prova {
 	}
 
 
-	private static void provaImportCalendar() {
+	public static void provaImportCalendar() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		Calendar startTime = Calendar.getInstance();
 		
@@ -158,7 +272,7 @@ public class Prova {
 	}
 
 
-	private static void provaAbstractFactoryPattern() {
+	public static void provaAbstractFactoryPattern() {
 		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
 		System.out.println("Ho creato la factory: "+factory.toString());
 		WorkflowMonitor monitor;
@@ -173,94 +287,14 @@ public class Prova {
 		}
 	}
 	
-	private static void provaDOM() {
-		// This element will help to managing the data format
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
-		
-		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();
-		System.out.println("Ho creato la factory: "+factory.toString());
-				
-		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
-		documentFactory.setValidating(true);
-		System.out.println("Ho creato la document factory");
-	
-		WorkflowMonitor monitor;
-		DocumentBuilder builder;
-		Document document;
-		try {
-			builder = documentFactory.newDocumentBuilder();
-			document = builder.parse("dtd/output.xml");
-			System.out.println("validation completed");
-			
-			monitor = factory.newWorkflowMonitor();
-			if(!(monitor instanceof ConcreteWorkflowMonitor)) {
-				System.err.println("Wrong instantiation, I can't proceed!");
-				System.exit(-1);
-			}
-				
-			NodeList lista = document.getElementsByTagName("WorkflowManager");
-			Element root = (Element)lista.item(0);
-			((ConcreteWorkflowMonitor) monitor).setParameter(root);
-			System.out.println("Ho creato il mio monitor:\n"+monitor.toString());
-			
-			
-			System.out.println("C'è "+lista.getLength()+" elemento chiamato WorkflowManager");
-			
-			NodeList wfNodes = root.getElementsByTagName("workflow");
-			System.out.println("Ci sono "+wfNodes.getLength()+" elementi chiamati workflow");
-			
-			NodeList wfProc = root.getElementsByTagName("process");
-			System.out.println("Ci sono "+wfProc.getLength()+" elementi chiamati process");
-			
-			WorkflowMonitor wfMonitor = new ConcreteWorkflowMonitor(root);
-			System.out.println("Nel mio oggetto ci sono: "+wfMonitor.getWorkflows().size()+" workflows");
-			System.out.println("Nel mio oggetto ci sono: "+wfMonitor.getProcesses().size()+" processi");
-			
-			Map<String, WorkflowReader>workflows = new HashMap<String, WorkflowReader>();
-		    for (int i=0; i<wfNodes.getLength(); i++) {
-		    	if(wfNodes.item(i) instanceof Element) {
-		    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
-		    		workflows.put(wf.getName(), wf);
-		    		System.out.println("Elemento "+i+" aggiunto!");
-		    	}
-		    	else
-		    		System.err.println("Banana!!!");
-		    }
-		    
-		    for(ProcessReader pr : wfMonitor.getProcesses()) {
-		    	for(ActionStatusReader asr : pr.getStatus()) {
-		    		asr.toString();
-		    	}
-		    }
-			
-		} catch (WorkflowMonitorException e) {
-			System.err.println("Non sono riuscito a creare il workflow monitor: "+e.getMessage());
-			e.printStackTrace();
-			System.exit(-1);
-		} catch (ParserConfigurationException e) {
-			System.err.println("Error creating the DocumentBuilder!");
-			e.printStackTrace();
-		} catch (SAXException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		} catch (IOException e) {
-			System.out.println(e.getMessage());
-			e.printStackTrace();
-		}
-		
-		
-		
-		
-	}
-
-	private static void provaStringSte() {
+	public static void provaStringSte() {
 		String banana= new String();
 		String ciao = "Ciao";
 		banana+=ciao;
 		System.err.println(banana+"\n");
 	}
 	
-	private static void prova01() {
+	public static void prova01() {
 		String wfrName = "MyWorkFlow1";
 		String aName = "MyAction1";
 		String role = "MyRole1";
