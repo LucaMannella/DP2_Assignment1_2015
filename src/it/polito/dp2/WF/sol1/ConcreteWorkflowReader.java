@@ -11,6 +11,8 @@ import org.w3c.dom.NodeList;
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.util.WFElements;
 
 public class ConcreteWorkflowReader implements WorkflowReader, Comparable<WorkflowReader> {
 
@@ -19,18 +21,18 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	private Set<ProcessReader> processes;
 
 	public ConcreteWorkflowReader(Element workflow) {
-		this.name = workflow.getAttribute("name");
+		this.name = workflow.getAttribute( WFAttributes.WORKFLOW_NAME.toString() );							//"name"
 		
 		actions = new HashMap<String, ActionReader>();
 		ActionReader ar;
 		// set the actions inside the object
-		NodeList actionNodes = workflow.getElementsByTagName("action");
+		NodeList actionNodes = workflow.getElementsByTagName( WFElements.action.toString() );				//"action"
 		
 		for (int i=0; i<actionNodes.getLength(); i++) {
 			if(actionNodes.item(i) instanceof Element) {
 				Element azione = (Element) actionNodes.item(i);
 				
-				if( azione.getElementsByTagName("process_action").getLength() >= 1 )
+				if( azione.getElementsByTagName( WFElements.process_action.toString() ).getLength() >= 1 )	//"process_action"
 					ar = new ProcessAction(azione, this);
 				else
 					ar = new SimpleAction(azione, this);				
@@ -50,7 +52,7 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 
 	@Override
 	public Set<ActionReader> getActions() {
-		return new TreeSet<>(actions.values());
+		return new TreeSet<ActionReader>(actions.values());
 	}
 
 	@Override

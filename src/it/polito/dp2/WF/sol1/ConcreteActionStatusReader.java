@@ -9,6 +9,8 @@ import org.w3c.dom.NodeList;
 
 import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.util.WFElements;
 
 public class ConcreteActionStatusReader implements ActionStatusReader {
 	
@@ -24,11 +26,11 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		endTime = Calendar.getInstance();
 		
-		String name = action.getAttribute("action");
+		String name = action.getAttribute( WFAttributes.ACTION_STATUS_NAME.toString() );		//"action"
 		this.name = name.replace(wfName+"_", "");
 		
-		String timestamp = action.getAttribute("timestamp");
-		String actorName = action.getAttribute("actor");
+		String timestamp = action.getAttribute( WFAttributes.ACTION_STATUS_TIME.toString() );	//"timestamp"
+		String actorName = action.getAttribute( WFAttributes.ACTION_STATUS_ACTOR.toString() );	//"actor"
 		
 		if(actorName.equals("")) {
 			actor = null;
@@ -38,16 +40,16 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		}
 		else {
 			Element root = (Element) action.getParentNode().getParentNode();
-			NodeList actorsNodes = root.getElementsByTagName("actors");
+			NodeList actorsNodes = root.getElementsByTagName( WFElements.actors.toString() );
 			
 			// this loop is executed just one time in this particular application
 			for(int i=0; i<actorsNodes.getLength(); i++) {
 				Element e = (Element) actorsNodes.item(i);
-				NodeList acts = e.getElementsByTagName("actor");
+				NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );
 				for(int j=0; j<acts.getLength(); j++) {
 					Element a = (Element) acts.item(j);
-					if(a.getAttribute("name").equals(actorName)) {
-						this.actor = new Actor(actorName, a.getAttribute("role"));
+					if(a.getAttribute( WFAttributes.ACTOR_NAME.toString() ).equals(actorName)) {
+						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE.toString() ));
 						break;
 					}
 				}
@@ -55,7 +57,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			
 			takenInCharge = true;
 			
-			if(timestamp.equals("Not Finished")) {
+			if(timestamp.equals( WFAttributes.STATUS_NOT_FINISHED.toString() )) {	//if (timestamp=="Not Finished")
 				terminated = false;
 				endTime.setTimeInMillis(0);
 			}

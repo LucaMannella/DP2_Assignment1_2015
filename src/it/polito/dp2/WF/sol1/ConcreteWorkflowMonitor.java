@@ -10,6 +10,8 @@ import org.w3c.dom.NodeList;
 import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.util.WFElements;
 
 public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
 
@@ -92,15 +94,18 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	public Actor getActor(String name) {
 		return actors.get(name);
 	}
+	
 	public Set<Actor> getActors() {
 		return new TreeSet<Actor>(actors.values());
 	}
+	
 	public void setParameter(Element root) {
 		int i=0;
+		final String WORKFLOW = WFElements.workflow.toString();									//"workflow"
 		if (root == null)
     		throw new IllegalArgumentException("Wrong parameter, element was null!");
     	
-		NodeList wfNodes = root.getElementsByTagName("workflow");
+		NodeList wfNodes = root.getElementsByTagName(WORKFLOW);
 		workflows = new HashMap<String, WorkflowReader>();
 	    for (i=0; i<wfNodes.getLength(); i++) {
 	    	if(wfNodes.item(i) instanceof Element) {
@@ -108,33 +113,39 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	    		workflows.put(wf.getName(), wf);
 	    	}
 	    }
-		
-		NodeList procNodes = root.getElementsByTagName("process");
+		System.out.println("DEBUG - Workflows created");
+	    
+		NodeList procNodes = root.getElementsByTagName( WFElements.process.toString() );		//"process"
 		processes = new HashMap<String, ProcessReader>();
 		int code = 1;
 		for (i=0; i<procNodes.getLength(); i++) {
 			Element e = (Element) wfNodes.item(i);	//ottengo processo i-esimo
-	    	ProcessReader proc = new ConcreteProcessReader( e, workflows.get(e.getAttribute("workflow")) );
+	    	ProcessReader proc = new ConcreteProcessReader( e, workflows.get(e.getAttribute(WORKFLOW)) );
 	    	//I should have already the workflow because I read it before and the document should be valid
 	    	processes.put("p"+code, proc);
 	    	code++;
 	    }
+		System.out.println("DEBUG - Processes created");
 		
 		//TODO: update this part if you want to manage more departments
 		actors = new HashMap<String, Actor>();
 		
-		NodeList actorsNodes = root.getElementsByTagName("actors");
+		NodeList actorsNodes = root.getElementsByTagName( WFElements.actors.toString() );		//"actors"
 		// this loop is executed just one time in this particular application
 		for(i=0; i<actorsNodes.getLength(); i++) {
 			
 			Element e = (Element) actorsNodes.item(i);
-			NodeList acts = e.getElementsByTagName("actor");
+			NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );				//"actor"
 			for(int j=0; j<acts.getLength(); j++) {
 				e = (Element) acts.item(j);
-				Actor a = new Actor( e.getAttribute("name"), e.getAttribute("role") );
+				String name = e.getAttribute( WFAttributes.ACTOR_NAME.toString() );
+				String role = e.getAttribute( WFAttributes.ACTOR_ROLE.toString() );
+				Actor a = new Actor(name, role);
+								
 				actors.put(a.getName(), a);
 			}
 		}
+		System.out.println("DEBUG - Actors created");
 		
 		return;
 	}

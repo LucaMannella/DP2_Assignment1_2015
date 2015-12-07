@@ -14,9 +14,12 @@ public enum WFAttributes {
 	PROCESS_CODE("code"),
 	PROCESS_TIME("started"),
 	PROCESS_WFNAME("workflow"),
+	
 	ACTION_STATUS_NAME("action"),
 	ACTION_STATUS_ACTOR("actor"),
 	ACTION_STATUS_TIME("timestamp"),
+		STATUS_NOT_FINISHED("Not Finished"),
+		STATUS_NOT_TAKEN("Not Taken"),
 	
 	ACTOR_NAME("name"),
 	ACTOR_ROLE("role");	

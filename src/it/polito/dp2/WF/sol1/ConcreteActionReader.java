@@ -4,6 +4,7 @@ import org.w3c.dom.Element;
 
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.WFAttributes;
 
 public abstract class ConcreteActionReader implements ActionReader {
 
@@ -13,10 +14,10 @@ public abstract class ConcreteActionReader implements ActionReader {
 	private WorkflowReader parent;
 
 	public ConcreteActionReader(Element action, WorkflowReader parent) {
-		this.name = action.getAttribute("name");
-		this.role = action.getAttribute("role");
+		this.name = action.getAttribute( WFAttributes.ACTION_NAME.toString() );					//"name"
+		this.role = action.getAttribute( WFAttributes.ACTION_ROLE.toString() );					//"role"
 		
-		String isAuto = action.getAttribute("automInst");
+		String isAuto = action.getAttribute( WFAttributes.ACTION_INSTANTIATION.toString() );	//"automInst"
 		if( isAuto.equalsIgnoreCase("true") )
 			this.automInst = true;
 		else

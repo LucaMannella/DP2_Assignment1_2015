@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.WFElements;
 
 public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessReader> {
 
@@ -28,13 +29,18 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();
 		try {
-			startTime.setTime( dateFormat.parse(proc.getAttribute("started")) );
+			String s = proc.getAttribute("started");
+			System.out.println("DEBUG - la stringa recuperata è: "+s.toString());
+			Date d = dateFormat.parse(s);
+			System.out.println("DEBUG - la data è parsificata è: "+d.toString());
+			startTime.setTime(d);
+			System.out.println("DEBUG - se stampo il calendario ottengo: "+startTime.toString());
 		} catch (ParseException e) {
 			System.err.println("Error parsing that process, current time will be used");
 			startTime.setTime( new Date() );
 		}
 		
-		NodeList actionNodes = proc.getElementsByTagName("action_status");
+		NodeList actionNodes = proc.getElementsByTagName( WFElements.action_status.toString() );	//("action_status")
 		actionStatus = new ArrayList<ActionStatusReader>();
 		for (int i=0; i<actionNodes.getLength(); i++) {
 	    	ActionStatusReader asr = new ConcreteActionStatusReader( (Element) actionNodes.item(i), workflow.getName() );
