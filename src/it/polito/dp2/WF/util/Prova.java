@@ -17,6 +17,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
@@ -34,6 +36,7 @@ public class Prova {
 
 	public static void main(String[] args) {
 		provaRemoveWFName();
+		provaDOM();
 		return;
 	}
 	
@@ -222,6 +225,12 @@ public class Prova {
 		    	}
 		    	else
 		    		System.err.println("Banana!!!");
+		    }
+		    
+		    for(ProcessReader pr : wfMonitor.getProcesses()) {
+		    	for(ActionStatusReader asr : pr.getStatus()) {
+		    		asr.toString();
+		    	}
 		    }
 			
 		} catch (WorkflowMonitorException e) {

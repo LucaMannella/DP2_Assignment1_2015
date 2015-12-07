@@ -24,6 +24,9 @@ An action_status is an instance of a particular action contained inside the work
 An action_status status has a pointer (IDREF) to the relative "action", another pointer (IDREF) to the actor that must complete them (is implied because the action could not be associated to nobody) and a CDATA that could represent the timestamp in which the action was completed or the status "Not Finished" or "Not Taken".
 
 
-The last element of the "WorkflowManager" is the element "actors" that is a container for all the elements "actor".
+The last element of the "WorkflowManager" is the element "actors" that is a container for the elements "actor".
+The element "actors" has an ID field (deparment) that is IMPLIED. That field could be used to divide the actors in different groups called deparments.
+This is not a text specification but I think that it could be usefull to a more complex application.
+
 An "actor" is characterized by a name, which uniquely identifies it (ID), and a role that is simply a string (CDATA).
 I choose to represent also the "actors" like entities because I think that could be a good way for having a program easy to extend to new features.

@@ -19,21 +19,21 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	private Set<ProcessReader> processes;
 
 	public ConcreteWorkflowReader(Element workflow) {
-		// set the workflow's name
 		this.name = workflow.getAttribute("name");
 		
+		actions = new HashMap<String, ActionReader>();
+		ActionReader ar;
 		// set the actions inside the object
 		NodeList actionNodes = workflow.getElementsByTagName("action");
-		actions = new HashMap<String, ActionReader>();
+		
 		for (int i=0; i<actionNodes.getLength(); i++) {
 			if(actionNodes.item(i) instanceof Element) {
 				Element azione = (Element) actionNodes.item(i);
-				ActionReader ar;
 				
-				if(name.equals("dodo")) //TODO: if azione.getFiglio().getName().equals("simple_action")
-					ar = new SimpleAction(azione, this);
-				else
+				if( azione.getElementsByTagName("process_action").getLength() >= 1 )
 					ar = new ProcessAction(azione, this);
+				else
+					ar = new SimpleAction(azione, this);				
 				
 	    		actions.put(ar.getName(), ar);
 	    	}
@@ -69,8 +69,18 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	}
 	
 	public String toString(){
+		StringBuffer buf = new StringBuffer("Workflow: "+name+"\n");
 		
-		return "Workflow: "+name+" - poi ci metterò le azioni e i processi";
+		buf.append("Actions:\n");
+		for(ActionReader ar : actions.values()) {
+			buf.append("\t"+ar.toString()+"\n");
+		}
+		buf.append("Processes:\n");
+		for(ProcessReader pr : processes) {
+			buf.append("\t"+pr.toString()+"\n");
+		}
+		
+		return buf.toString();
 	}
 
 	

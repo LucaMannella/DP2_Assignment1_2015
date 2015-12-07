@@ -30,14 +30,14 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 		try {
 			startTime.setTime( dateFormat.parse(proc.getAttribute("started")) );
 		} catch (ParseException e) {
-			System.err.println("Error parsing data, current time will be used");
+			System.err.println("Error parsing that process, current time will be used");
 			startTime.setTime( new Date() );
 		}
 		
 		NodeList actionNodes = proc.getElementsByTagName("action_status");
 		actionStatus = new ArrayList<ActionStatusReader>();
 		for (int i=0; i<actionNodes.getLength(); i++) {
-	    	ActionStatusReader asr = new ConcreteActionStatusReader( (Element) actionNodes.item(i) );
+	    	ActionStatusReader asr = new ConcreteActionStatusReader( (Element) actionNodes.item(i), workflow.getName() );
 	    	actionStatus.add(asr);
 	    }
 	}
