@@ -23,6 +23,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	public ConcreteWorkflowMonitor() {/*default constructor*/
 		processes = new HashMap<String, ProcessReader>();
 		workflows = new HashMap<String, WorkflowReader>();
+		actors = new HashMap<String, Actor>();
 	}
 	//TODO: nell'implementazione di Sisto viene tutto generato nel costruttore di default 
 	
@@ -51,7 +52,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		}
 	}
 	
-	public ConcreteWorkflowMonitor(Element element) throws IllegalArgumentException {
+	public ConcreteWorkflowMonitor(Element element) {
 		setParameter(element);
 	}
 
@@ -105,44 +106,58 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		if (root == null)
     		throw new IllegalArgumentException("Wrong parameter, element was null!");
     	
-		NodeList wfNodes = root.getElementsByTagName(WORKFLOW);
 		workflows = new HashMap<String, WorkflowReader>();
+		processes = new HashMap<String, ProcessReader>();
+		actors = new HashMap<String, Actor>();
+
+		/* workflows */
+		NodeList wfNodes = root.getElementsByTagName(WORKFLOW);
+		System.out.println("DEBUG - In the document there are "+wfNodes.getLength()+" workflows");
 	    for (i=0; i<wfNodes.getLength(); i++) {
-	    	if(wfNodes.item(i) instanceof Element) {
+	    	if(wfNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
 	    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
 	    		workflows.put(wf.getName(), wf);
 	    	}
 	    }
 		System.out.println("DEBUG - Workflows created");
-	    
+		
+		/* processes */
 		NodeList procNodes = root.getElementsByTagName( WFElements.process.toString() );		//"process"
-		processes = new HashMap<String, ProcessReader>();
+		System.out.println("DEBUG - In the document there are "+procNodes.getLength()+" processes");
 		int code = 1;
 		for (i=0; i<procNodes.getLength(); i++) {
-			Element e = (Element) wfNodes.item(i);	//ottengo processo i-esimo
-	    	ProcessReader proc = new ConcreteProcessReader( e, workflows.get(e.getAttribute(WORKFLOW)) );
-	    	//I should have already the workflow because I read it before and the document should be valid
-	    	processes.put("p"+code, proc);
-	    	code++;
+			if(procNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
+				Element e = (Element) procNodes.item(i);
+				//I should have already the workflow inside the hashmap (document should be valid)
+				WorkflowReader myWF = workflows.get(e.getAttribute(WORKFLOW));
+				System.out.println("DEBUG - My workflow is: "+myWF.getName());
+				
+		    	ProcessReader proc = new ConcreteProcessReader(e, myWF);		    	
+		    	processes.put("p"+code, proc);
+		    	code++;
+			}
 	    }
 		System.out.println("DEBUG - Processes created");
 		
-		//TODO: update this part if you want to manage more departments
-		actors = new HashMap<String, Actor>();
-		
+		/* actors */	//TODO: update this part if you want to manage more departments		
 		NodeList actorsNodes = root.getElementsByTagName( WFElements.actors.toString() );		//"actors"
+		System.out.println("DEBUG - Number of tag actors: "+actorsNodes.getLength());
 		// this loop is executed just one time in this particular application
 		for(i=0; i<actorsNodes.getLength(); i++) {
-			
-			Element e = (Element) actorsNodes.item(i);
-			NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );				//"actor"
-			for(int j=0; j<acts.getLength(); j++) {
-				e = (Element) acts.item(j);
-				String name = e.getAttribute( WFAttributes.ACTOR_NAME.toString() );
-				String role = e.getAttribute( WFAttributes.ACTOR_ROLE.toString() );
-				Actor a = new Actor(name, role);
-								
-				actors.put(a.getName(), a);
+			if(actorsNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
+				Element e = (Element) actorsNodes.item(i);
+				NodeList acts = e.getElementsByTagName( WFElements.actor.toString() );			//"actor"
+				System.out.println("DEBUG - Number of actor: "+acts.getLength());
+				for(int j=0; j<acts.getLength(); j++) {
+					if(acts.item(i) instanceof Element) {	//if I don't take an element I ignore it
+						e = (Element) acts.item(j);
+						String name = e.getAttribute( WFAttributes.ACTOR_NAME.toString() );
+						String role = e.getAttribute( WFAttributes.ACTOR_ROLE.toString() );
+						
+						Actor a = new Actor(name, role);						
+						actors.put(a.getName(), a);
+					}
+				}
 			}
 		}
 		System.out.println("DEBUG - Actors created");
