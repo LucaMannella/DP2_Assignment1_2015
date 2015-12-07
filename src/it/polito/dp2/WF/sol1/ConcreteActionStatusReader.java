@@ -12,6 +12,12 @@ import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.util.WFAttributes;
 import it.polito.dp2.WF.util.WFElements;
 
+/**
+ * This is a concrete implementation of the interface ActionStatusReader.<BR><BR>
+ * If you want more detail about the interface look to {@link it.polito.dp2.WF.ActionStatusReader}
+ * 
+ * @author Luca
+ */
 public class ConcreteActionStatusReader implements ActionStatusReader {
 	
 	private SimpleDateFormat dateFormat;

@@ -15,6 +15,12 @@ import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.util.WFElements;
 
+/**
+ * This is a concrete implementation of the interface ProcessReader.<BR><BR>
+ * If you want more detail about the interface look to {@link it.polito.dp2.WF.ProcessReader}
+ * 
+ * @author Luca
+ */
 public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessReader> {
 
 	private SimpleDateFormat dateFormat;
