@@ -13,6 +13,12 @@ import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.util.WFAttributes;
 import it.polito.dp2.WF.util.WFElements;
 
+/**
+ * This is a concrete implementation of the interface WorkflowMonitor.<BR><BR>
+ * If you want more detail about the interface look to {@link it.polito.dp2.WF.WorkflowMonitor}
+ * 
+ * @author Luca
+ */
 public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor {
 
 	private HashMap<String, ProcessReader> processes;
@@ -101,35 +107,34 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	}
 	
 	public void setParameter(Element root) {
-		int i=0;
-		final String WORKFLOW = WFElements.WORKFLOW;									//"workflow"
 		if (root == null)
     		throw new IllegalArgumentException("Wrong parameter, element was null!");
     	
 		workflows = new HashMap<String, WorkflowReader>();
 		processes = new HashMap<String, ProcessReader>();
 		actors = new HashMap<String, Actor>();
-
+		int i=0;
+		NodeList wfNodes = root.getElementsByTagName(WFElements.WORKFLOW);		//"workflow"
+		NodeList procNodes = root.getElementsByTagName(WFElements.PROCESS);		//"process"
+		
 		/* workflows */
-		NodeList wfNodes = root.getElementsByTagName(WORKFLOW);
 		System.out.println("DEBUG - In the document there are "+wfNodes.getLength()+" workflows");
 	    for (i=0; i<wfNodes.getLength(); i++) {
 	    	if(wfNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
-	    		WorkflowReader wf = new ConcreteWorkflowReader((Element) wfNodes.item(i));
+	    		WorkflowReader wf = new ConcreteWorkflowReader((Element)wfNodes.item(i), procNodes);
 	    		workflows.put(wf.getName(), wf);
 	    	}
 	    }
 		System.out.println("DEBUG - Workflows created");
 		
 		/* processes */
-		NodeList procNodes = root.getElementsByTagName( WFElements.PROCESS );		//"process"
 		System.out.println("DEBUG - In the document there are "+procNodes.getLength()+" processes");
 		int code = 1;
 		for (i=0; i<procNodes.getLength(); i++) {
 			if(procNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
 				Element e = (Element) procNodes.item(i);
 				//I should have already the workflow inside the hashmap (document should be valid)
-				WorkflowReader myWF = workflows.get(e.getAttribute(WORKFLOW));
+				WorkflowReader myWF = workflows.get(e.getAttribute(WFElements.WORKFLOW));
 				System.out.println("DEBUG - My workflow is: "+myWF.getName());
 				
 		    	ProcessReader proc = new ConcreteProcessReader(e, myWF);		    	
