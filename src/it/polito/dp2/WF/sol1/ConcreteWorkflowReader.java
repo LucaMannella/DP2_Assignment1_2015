@@ -1,6 +1,7 @@
 package it.polito.dp2.WF.sol1;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
@@ -28,7 +29,7 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 
 	public ConcreteWorkflowReader(Element workflow, NodeList procNodes) {
 		actions = new HashMap<String, ActionReader>();
-		processes = new TreeSet<ProcessReader>();
+		processes = new HashSet<ProcessReader>();
 		
 //TODO:	if(workflow == null) return;	//safety lock
 		this.name = workflow.getAttribute( WFAttributes.WORKFLOW_NAME );				//"name"

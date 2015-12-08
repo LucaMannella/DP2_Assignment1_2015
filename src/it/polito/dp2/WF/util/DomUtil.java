@@ -1,20 +1,13 @@
 package it.polito.dp2.WF.util;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import it.polito.dp2.WF.WorkflowMonitor;
-import it.polito.dp2.WF.WorkflowMonitorFactory;
-import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
 
 public class DomUtil {
 
@@ -33,9 +26,11 @@ public class DomUtil {
 	}
 	
 	/**
-	 * This method parse the specified XML document an it returns a DOM instance
+	 * This method parse the specified XML document an it returns a DOM instance.
+	 * 
 	 * @param inputFileName The name of the file to parse
 	 * @param validating Specify true if you want that the document was validated
+	 * 
 	 * @return A DOM object representing the XML file
 	 */
 	public static Document parseDomDocument(String inputFileName, boolean validating){
