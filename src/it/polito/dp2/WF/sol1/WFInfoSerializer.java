@@ -188,11 +188,11 @@ public class WFInfoSerializer {
 				Element subAction;
 				if (ar instanceof SimpleActionReader) {
 					//creating a simple_action
-					subAction = doc.createElement( WFElements.SIMLE_ACTION );
+					subAction = doc.createElement( WFElements.SIMPLE_ACTION );
 					// taking next actions
 					Set<ActionReader> setNext = ((SimpleActionReader)ar).getPossibleNextActions();
 					
-					if( !setNext.isEmpty() ) {
+					if( (setNext!=null) && (!setNext.isEmpty()) ) {
 						StringBuffer attributes = new StringBuffer();
 						for(ActionReader a : setNext) {
 							attributes.append( wfName+"_"+a.getName()+" " );
