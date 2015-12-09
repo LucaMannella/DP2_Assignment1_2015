@@ -9,9 +9,9 @@ import it.polito.dp2.WF.WorkflowMonitorException;
  * 
  * @author Luca
  */
-public class ConcreteWorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFactory {
+public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFactory {
 
-    public ConcreteWorkflowMonitorFactory() { }
+    public WorkflowMonitorFactory() { }
 
 	/**
 	 * This method creates an instance of my concrete class that implements the WorkflowMonitor interface.
@@ -19,6 +19,7 @@ public class ConcreteWorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMon
 	@Override
 	public WorkflowMonitor newWorkflowMonitor() throws WorkflowMonitorException {
 		WorkflowMonitor myMonitor = new ConcreteWorkflowMonitor();
+		System.out.println("WorkflowMonitor created!");
 		return myMonitor;
 	}
 	
