@@ -173,6 +173,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 						String name = e.getAttribute( WFAttributes.ACTOR_NAME );
 						String role = e.getAttribute( WFAttributes.ACTOR_ROLE );
 						
+						name = name.replaceAll("_", " ");
 						Actor a = new Actor(name, role);						
 						actors.put(a.getName(), a);
 					}

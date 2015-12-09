@@ -54,9 +54,12 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			for(int i=0; i<actorsNodes.getLength(); i++) {
 				Element e = (Element) actorsNodes.item(i);
 				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );
+				
 				for(int j=0; j<acts.getLength(); j++) {
 					Element a = (Element) acts.item(j);
+					//confronting the string taken from the element <actor name="name_surname"> with the one taken from <action_status> 
 					if(a.getAttribute( WFAttributes.ACTOR_NAME ).equals(actorName)) {
+						actorName = actorName.replaceAll("_", " ");
 						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE ));
 						break;
 					}
