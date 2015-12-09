@@ -41,12 +41,15 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 				Element azione = (Element) actionNodes.item(i);
 				ActionReader ar;
 				
-				if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 )	//"process_action"
-					ar = new ProcessAction(azione, this);
-				else
-					ar = new SimpleAction(azione, this);				
-				
-	    		actions.put(ar.getName(), ar);
+				if(! actions.containsKey( azione.getAttribute(WFAttributes.ACTION_NAME) )) {
+					//I create a new action only if they does not still exists
+					if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 )	//"process_action"
+						ar = new ProcessAction(azione, this);
+					else
+						ar = new SimpleAction(azione, this);				
+					
+		    		actions.put(ar.getName(), ar);
+				}
 	    	}
 		}
 		
@@ -103,6 +106,10 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		}
 		
 		return buf.toString();
+	}
+
+	public void addAction(ActionReader ar) {
+		actions.put(ar.getName(), ar);
 	}
 	
 }

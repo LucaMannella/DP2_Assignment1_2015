@@ -5,7 +5,6 @@ import java.util.Set;
 import java.util.StringTokenizer;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import it.polito.dp2.WF.ActionReader;
@@ -44,6 +43,9 @@ public class SimpleAction extends AbstractActionReader implements SimpleActionRe
 			NodeList actions = wf.getElementsByTagName(WFElements.ACTION);
 			
 			//dividing the string in the different ids
+			@SuppressWarnings("unused")
+			String[] azioni = actionStrings.split(" ");
+			
 			StringTokenizer st = new StringTokenizer(actionStrings, " ");
 			while(st.hasMoreTokens()) {
 				String act = st.nextToken();
@@ -52,13 +54,17 @@ public class SimpleAction extends AbstractActionReader implements SimpleActionRe
 				for(int i=0; i<actions.getLength(); i++) {
 					Element azione = (Element)actions.item(i);
 					if( azione.getAttribute(WFAttributes.ACTION_ID).equals(act) ) {
-						
-						ActionReader ar;
-						if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 )	//"process_action"
-							ar = new ProcessAction(azione, workflow);
-						else
-							ar = new SimpleAction(azione, workflow);
-						
+						String name = azione.getAttribute(WFAttributes.ACTION_NAME);
+						ActionReader ar = workflow.getAction(name);
+						if( ar==null ) {
+							if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 )	//"process_action"
+								ar = new ProcessAction(azione, workflow);
+							else
+								ar = new SimpleAction(azione, workflow);
+							
+							((ConcreteWorkflowReader)workflow).addAction(ar);
+							
+						}
 						nextActions.add(ar);
 						//when I found the match I go the next token
 						break;
