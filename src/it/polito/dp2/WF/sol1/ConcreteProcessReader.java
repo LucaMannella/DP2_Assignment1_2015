@@ -40,11 +40,11 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 		/* Calendar startTime creation */
 		try {
 			String s = proc.getAttribute("started");
-			System.out.println("DEBUG - la stringa recuperata è: "+s.toString());
+//			System.out.println("DEBUG - la stringa recuperata è: "+s.toString());
 			Date d = dateFormat.parse(s);
-			System.out.println("DEBUG - la data è parsificata è: "+d.toString());
+//			System.out.println("DEBUG - la data è parsificata è: "+d.toString());
 			startTime.setTime(d);
-			System.out.println("DEBUG - se stampo il calendario ottengo: "+startTime.toString());
+//			System.out.println("DEBUG - se stampo il calendario ottengo: "+startTime.toString());
 		} catch (ParseException e) {
 			System.err.println("Error parsing that process, current time will be used");
 			startTime.setTime( new Date() );
