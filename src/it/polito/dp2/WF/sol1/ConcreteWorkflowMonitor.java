@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.DomUtil;
 import it.polito.dp2.WF.util.WFAttributes;
 import it.polito.dp2.WF.util.WFElements;
 
@@ -25,13 +28,24 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	private HashMap<String, WorkflowReader> workflows;
 	private HashMap<String, Actor> actors;
 
-	//TODO: devo considerare che si possa creare un WorkflowManager vuoto?!
-	public ConcreteWorkflowMonitor() {/*default constructor*/
-		processes = new HashMap<String, ProcessReader>();
-		workflows = new HashMap<String, WorkflowReader>();
-		actors = new HashMap<String, Actor>();
+	public ConcreteWorkflowMonitor() { /* --- default constructor --- */
+		String inputFileName = System.getProperty("it.polito.dp2.WF.sol1.WFInfo.file");
+		
+		Document doc = DomUtil.parseDomDocument(inputFileName, true);		
+		if(doc == null) {
+			System.err.println("The document is null, something wrong happens!");
+			System.exit(12);
+		}
+		
+		NodeList list = doc.getElementsByTagName(WFElements.WORKFLOW_MANAGER);
+		if( (list.item(0) == null) || (list.item(0).getNodeType() != Node.ELEMENT_NODE) ) {
+			System.err.println("Something wrong in the root element!");
+			System.exit(13);
+		}
+		
+		Element root = (Element) list.item(0);
+		setParameter(root);
 	}
-	//TODO: nell'implementazione di Sisto viene tutto generato nel costruttore di default 
 	
 	//if I valid the document before creating the element I can assume some stuff
 	public ConcreteWorkflowMonitor(Set<ProcessReader> processes, Set<WorkflowReader> workflows, Set<Actor> actors)
@@ -73,7 +87,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	}
 
 	@Override
-	public Set<WorkflowReader> getWorkflows() {	//TODO: test this method
+	public Set<WorkflowReader> getWorkflows() {
 		return new TreeSet<WorkflowReader>(workflows.values());
 	}
 	
