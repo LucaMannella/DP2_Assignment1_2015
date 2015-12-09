@@ -1,5 +1,10 @@
 package it.polito.dp2.WF.sol1;
 
+import it.polito.dp2.WF.WorkflowMonitor;
+import it.polito.dp2.WF.WorkflowMonitorException;
+import it.polito.dp2.WF.WorkflowMonitorFactory;
+import it.polito.dp2.WF.util.DomParseErrorHandler;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -10,11 +15,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
-
-import it.polito.dp2.WF.WorkflowMonitor;
-import it.polito.dp2.WF.WorkflowMonitorException;
-import it.polito.dp2.WF.WorkflowMonitorFactory;
-import it.polito.dp2.WF.util.DomParseErrorHandler;
 
 public class WFParser {
 	

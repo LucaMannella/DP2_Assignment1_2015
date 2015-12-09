@@ -43,11 +43,14 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 				
 				if(! actions.containsKey( azione.getAttribute(WFAttributes.ACTION_NAME) )) {
 					//I create a new action only if they does not still exists
-					if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 )	//"process_action"
+					if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 ) {	//"process_action"
 						ar = new ProcessAction(azione, this);
-					else
-						ar = new SimpleAction(azione, this);				
-					
+					}
+					else {
+						SimpleAction sar = new SimpleAction(azione, this);
+						sar.addNextAction();
+						ar = sar;
+					}
 		    		actions.put(ar.getName(), ar);
 				}
 	    	}

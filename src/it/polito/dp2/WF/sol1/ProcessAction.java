@@ -1,15 +1,12 @@
 package it.polito.dp2.WF.sol1;
 
-import java.util.HashSet;
-
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-
-import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessActionReader;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.util.WFAttributes;
 import it.polito.dp2.WF.util.WFElements;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * This is a concrete implementation of abstract class AbstractActionReader (that implements the interface ActionReader).<BR>

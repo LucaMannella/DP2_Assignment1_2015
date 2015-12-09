@@ -1,5 +1,16 @@
 package it.polito.dp2.WF.myTests;
 
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.WorkflowMonitor;
+import it.polito.dp2.WF.WorkflowMonitorException;
+import it.polito.dp2.WF.WorkflowMonitorFactory;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
+import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
+import it.polito.dp2.WF.util.DomUtil;
+import it.polito.dp2.WF.util.WFAttributesEnum;
+
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,18 +27,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.ProcessReader;
-import it.polito.dp2.WF.WorkflowMonitor;
-import it.polito.dp2.WF.WorkflowMonitorException;
-import it.polito.dp2.WF.WorkflowMonitorFactory;
-import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.sol1.ConcreteWorkflowMonitor;
-import it.polito.dp2.WF.sol1.ConcreteWorkflowReader;
-import it.polito.dp2.WF.util.DomUtil;
-import it.polito.dp2.WF.util.WFAttributes;
-import it.polito.dp2.WF.util.WFAttributesEnum;
 
 /**
  * This class will be used for some testing in the first assignment.
@@ -68,6 +67,7 @@ public class Prova {
 
 	public static void provaDOM() {
 		// This element will help to managing the data format
+		@SuppressWarnings("unused")
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		
 		WorkflowMonitorFactory factory = WorkflowMonitorFactory.newInstance();

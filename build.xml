@@ -187,10 +187,10 @@
 		<echo>*** XML file validated ***</echo>
 
 		<junit printsummary="yes" dir="${temp.dir}" fork="yes" haltonfailure="no" showoutput="no" filtertrace="true">
-			<!-- this is for debug purpose
+			<!-- this is for debug purpose -->
 			<jvmarg value="-Xdebug" />
 			<jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,suspend=y,address=5432" />
-			 end debug zone -->
+			<!-- end debug zone -->
 			<sysproperty key="it.polito.dp2.WF.Random.testcase" value="${testcase}"/>
 			<sysproperty key="it.polito.dp2.WF.Random.seed" value="${seed}"/>
 			<sysproperty key="it.polito.dp2.WF.sol1.WFInfo.file " value="${temp.xmlfile}"/>
