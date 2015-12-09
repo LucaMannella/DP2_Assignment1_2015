@@ -12,8 +12,10 @@ import org.w3c.dom.NodeList;
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessReader;
 import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.util.DomUtil;
 import it.polito.dp2.WF.util.WFAttributes;
 import it.polito.dp2.WF.util.WFElements;
+import it.polito.dp2.WF.util.WFUtil;
 
 /**
  * This is a concrete implementation of the interface WorkflowReader.<BR><BR>
@@ -37,21 +39,52 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		// set the actions inside the object
 		NodeList actionNodes = workflow.getElementsByTagName( WFElements.ACTION );		//"action"
 		for (int i=0; i<actionNodes.getLength(); i++) {
+			
 			if(actionNodes.item(i) instanceof Element) {		//if it's not an element I ignore it
 				Element azione = (Element) actionNodes.item(i);
-				ActionReader ar;
 				
 				if(! actions.containsKey( azione.getAttribute(WFAttributes.ACTION_NAME) )) {
 					//I create a new action only if they does not still exists
-					if( azione.getElementsByTagName(WFElements.PROCESS_ACTION).getLength() >= 1 ) {	//"process_action"
-						ar = new ProcessAction(azione, this);
+					if( WFUtil.isProcessAction(azione) ) {
+						ActionReader ar = new ProcessAction(azione, this);
+						actions.put(ar.getName(), ar);
 					}
 					else {
 						SimpleAction sar = new SimpleAction(azione, this);
-						sar.addNextAction();
-						ar = sar;
-					}
-		    		actions.put(ar.getName(), ar);
+						actions.put(sar.getName(), sar);
+						
+						String nextActionStr = WFUtil.takeNextActions(azione);
+						if((nextActionStr != null)&&( !nextActionStr.equals("") )) {
+							
+							//dividing the string in the different ids
+							String[] nextActionStrings = nextActionStr.split(" ");
+							for(String nextAct : nextActionStrings) {
+								//for each action I'm looking for its data
+								
+								for(int j=0; j<actionNodes.getLength(); j++) {
+									
+									Element act = (Element)actionNodes.item(j);
+									if( act.getAttribute( WFAttributes.ACTION_ID ).equals(nextAct) ) {
+										String name = act.getAttribute( WFAttributes.ACTION_NAME );
+										ActionReader ar = actions.get(name);
+										if( ar==null ) {
+											if( WFUtil.isProcessAction(act) )
+												ar = new ProcessAction(act, this);
+											else
+												ar = new SimpleAction(act, this);
+											
+											actions.put(ar.getName(), ar);											
+										}
+										sar.addPossibleNextAction(ar);
+										
+										break;
+									}
+								}//end FOR on Element Actions
+								
+							}//end FOR on tokens (Actions ID)
+						}//go directly here if I don't have next Actions
+						
+					}// end of the manage of the SimpleAction
 				}
 	    	}
 		}
@@ -96,7 +129,7 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		return this.name.compareTo(o.getName());
 	}
 	
-	public String toString(){
+	public String toString() {
 		StringBuffer buf = new StringBuffer("Workflow: "+name+"\n");
 		
 		buf.append("Actions:\n");
@@ -109,10 +142,6 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		}
 		
 		return buf.toString();
-	}
-
-	public void addAction(ActionReader ar) {
-		actions.put(ar.getName(), ar);
 	}
 	
 }
