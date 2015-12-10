@@ -5,15 +5,15 @@ import javax.xml.parsers.*;
 import org.xml.sax.*;
 
 /**
- * DomParseV.java
+ * DomParseValidator.java
  * Validating parser with error diagnostics and warnings
  */
-public class DomParseV {
+public class DomParseValidator {
     
 	public static void main(String argv[])
     {
         if (argv.length != 1) {
-          System.err.println("Usage: java DomParseV filename");
+          System.err.println("Usage: java DomParseValidator filename");
           System.exit(1);
         }
 
@@ -26,7 +26,7 @@ public class DomParseV {
 
         try {
            DocumentBuilder builder = factory.newDocumentBuilder();
-           builder.setErrorHandler(new DomParseVHandler());
+           builder.setErrorHandler(new DomParseErrorHandler());
            builder.parse( new File(argv[0]) );
            System.out.println("Parsing successful!");
 
@@ -72,24 +72,5 @@ public class DomParseV {
         	System.exit(1);
         }
     } // end of main
-	
-}
-
-class DomParseVHandler extends org.xml.sax.helpers.DefaultHandler {
-	
-  // Validation errors are treated as fatal
-  public void error (SAXParseException e) throws SAXParseException
-  {
-    throw e;
-  }
-
-  // Warnings are displayed (without terminating)
-  public void warning (SAXParseException e) throws SAXParseException
-  {
-    System.out.println("** Warning"
-            + ", file " + e.getSystemId()
-            + ", line " + e.getLineNumber());
-    System.out.println("   " + e.getMessage() );
-  }
   
 }

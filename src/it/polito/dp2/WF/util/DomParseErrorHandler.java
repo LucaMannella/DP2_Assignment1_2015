@@ -1,27 +1,22 @@
 package it.polito.dp2.WF.util;
 
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import org.xml.sax.helpers.DefaultHandler;
 
-public class DomParseErrorHandler implements ErrorHandler {
+public class DomParseErrorHandler extends DefaultHandler {
 
-	@Override
+	@Override	// Warnings are displayed (without terminating)
 	public void warning(SAXParseException exception) throws SAXException {
-		// TODO Auto-generated method stub
-
+		System.out.println("** Warning"
+	            + ", file " + exception.getSystemId()
+	            + ", line " + exception.getLineNumber());
+		System.out.println("   " + exception.getMessage() );
 	}
 
-	@Override
+	@Override	// Validation errors are treated as fatal
 	public void error(SAXParseException exception) throws SAXException {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void fatalError(SAXParseException exception) throws SAXException {
-		// TODO Auto-generated method stub
-
-	}
+		throw exception;
+	}	 
 
 }
