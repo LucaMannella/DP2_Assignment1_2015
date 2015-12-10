@@ -1,4 +1,4 @@
-package it.polito.dp2.WF.util;
+package it.polito.dp2.WF.sol1.util;
 
 /**
  * This class contains all the elements that can appear inside the XML file described

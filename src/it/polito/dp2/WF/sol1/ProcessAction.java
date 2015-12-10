@@ -1,12 +1,12 @@
 package it.polito.dp2.WF.sol1;
 
-import it.polito.dp2.WF.ProcessActionReader;
-import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.util.WFAttributes;
-import it.polito.dp2.WF.util.WFElements;
-
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+
+import it.polito.dp2.WF.ProcessActionReader;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This is a concrete implementation of abstract class AbstractActionReader (that implements the interface ActionReader).<BR>

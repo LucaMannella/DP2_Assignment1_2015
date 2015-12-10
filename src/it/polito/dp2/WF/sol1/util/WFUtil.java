@@ -1,4 +1,4 @@
-package it.polito.dp2.WF.util;
+package it.polito.dp2.WF.sol1.util;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

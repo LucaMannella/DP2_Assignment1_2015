@@ -20,7 +20,7 @@ import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.util.DomParseV;
+import it.polito.dp2.WF.sol1.util.DomParseValidator;
 
 /**
  * This class serialize a Workflow into an XML file.
@@ -92,7 +92,7 @@ public class WFInfoSerializerManual {
 		}
 		
 		System.out.println("The created file will be validated");
-		DomParseV.main(args);
+		DomParseValidator.main(args);
 		System.out.println("The parsing was completed!");
 		return;
 	}

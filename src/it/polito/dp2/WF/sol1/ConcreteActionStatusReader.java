@@ -9,8 +9,8 @@ import org.w3c.dom.NodeList;
 
 import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.Actor;
-import it.polito.dp2.WF.util.WFAttributes;
-import it.polito.dp2.WF.util.WFElements;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This is a concrete implementation of the interface ActionStatusReader.<BR><BR>

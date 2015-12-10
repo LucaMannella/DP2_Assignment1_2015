@@ -1,4 +1,4 @@
-package it.polito.dp2.WF.util;
+package it.polito.dp2.WF.sol1.util;
 
 public enum WFAttributesEnum {
 	

@@ -34,10 +34,10 @@ import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 import it.polito.dp2.WF.WorkflowMonitorFactory;
 import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.util.DomParseV;
-import it.polito.dp2.WF.util.DomUtil;
-import it.polito.dp2.WF.util.WFAttributes;
-import it.polito.dp2.WF.util.WFElements;
+import it.polito.dp2.WF.sol1.util.DomParseValidator;
+import it.polito.dp2.WF.sol1.util.DomUtil;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This class serialize a Workflow into an XML file.
@@ -93,7 +93,8 @@ public class WFInfoSerializer {
 			wf.appendProcesses();
 			wf.appendActors();
 			
-			wf.printDOM(System.out);
+			PrintStream logFile = new PrintStream(new File("dtd/output_log.xml"));
+			wf.printDOM(logFile);
 			PrintStream fpout = new PrintStream(new File(args[0]));
 			wf.printDOM(fpout);
 
@@ -120,7 +121,7 @@ public class WFInfoSerializer {
 		}
 
 		System.out.println("The created file will be validated");
-		DomParseV.main(args);
+		DomParseValidator.main(args);
 		System.out.println("The parsing was completed!");
 		return;
 	}

@@ -4,7 +4,7 @@ import org.w3c.dom.Element;
 
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
 
 /**
  * This is an abstract implementation of the interface ActionReader.<BR>
