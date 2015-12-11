@@ -45,5 +45,14 @@ public class SimpleAction extends AbstractActionReader implements SimpleActionRe
 	public void addPossibleNextAction(ActionReader ar) {
 		nextActions.put(ar.getName(), ar);
 	}
+	
+	@Override
+	public String toString() {
+		StringBuffer buf = new StringBuffer("NextActions: ");
+		for(ActionReader ar : nextActions.values())
+			buf.append(ar.getName());
+		
+		return super.toString()+"\n\t\t"+buf.toString();
+	}
 
 }

@@ -54,5 +54,10 @@ public abstract class AbstractActionReader implements ActionReader {
 	public boolean isAutomaticallyInstantiated() {
 		return automInst;
 	}
+	
+	@Override
+	public String toString() {
+		return "\tAction: "+name+" - Requested Role: "+role+" - Parent workflow: "+parent.getName()+" - AutomInst: "+automInst;
+	}
 
 }

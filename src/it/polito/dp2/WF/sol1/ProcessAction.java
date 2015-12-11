@@ -50,5 +50,10 @@ public class ProcessAction extends AbstractActionReader implements ProcessAction
 	public WorkflowReader getActionWorkflow() {
 		return this.nextWorkflow;
 	}
+	
+	@Override
+	public String toString() {
+		return super.toString()+"\n\t\tNextWorkflow: "+nextWorkflow.getName();
+	}
 
 }
