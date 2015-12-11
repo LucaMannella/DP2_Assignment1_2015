@@ -98,7 +98,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		if(workflows==null)
 			buf.append("\tNo Workflows\n");
 		else {
-			buf.append("\tWorkflows:\n");
+			buf.append("Workflows:\n");
 			for(WorkflowReader wfr : workflows.values())
 				buf.append("\t\t"+wfr.toString()+"\n");
 		}
@@ -106,10 +106,19 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		if(processes==null)
 			buf.append("\tNo Processes\n");
 		else {
-			buf.append("\tProcesses:\n");
+			buf.append("Processes:\n");
 			for(ProcessReader pr : processes.values())
-				buf.append("\t\t"+pr.toString()+"\n");
+				buf.append("\t"+pr.toString()+"\n");
 		}
+				
+		if(actors==null)
+			buf.append("\tNo Actors\n");
+		else {
+			buf.append("Actors:\n");
+			for(Actor a : actors.values())
+				buf.append("\t"+a.toString()+"\n");
+		}
+		
 		return buf.toString();
 	}
 	
