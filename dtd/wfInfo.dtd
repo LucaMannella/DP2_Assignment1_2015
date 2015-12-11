@@ -1,5 +1,5 @@
 <!-- DTD for a Workflow Management System -->
-<!ELEMENT WorkflowManager (workflow | process | actors)+ >
+<!ELEMENT WorkflowManager (workflow | process | actors)* >
 
 
 <!ELEMENT workflow (action)+ >
