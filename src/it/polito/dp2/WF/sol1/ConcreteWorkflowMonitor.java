@@ -159,10 +159,10 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 				Element e = (Element) procNodes.item(i);
 				//I should have already the workflow inside the hashmap (document should be valid)
 				WorkflowReader myWF = workflows.get(e.getAttribute(WFElements.WORKFLOW));
-				System.out.println("DEBUG - My workflow is: "+myWF.getName());
 				
 		    	ProcessReader proc = new ConcreteProcessReader(e, myWF);		    	
 		    	processes.put("p"+code, proc);
+		    	System.out.println("DEBUG - I'm the process p"+code+" - My workflow is: "+myWF.getName());
 		    	code++;
 			}
 	    }

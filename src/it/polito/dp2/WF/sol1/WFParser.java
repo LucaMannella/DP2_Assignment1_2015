@@ -33,7 +33,8 @@ public class WFParser {
 		builder.parse(inputFileName);
 		
 		// This element will help to managing the data format
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
+		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
 	}
 	
 	

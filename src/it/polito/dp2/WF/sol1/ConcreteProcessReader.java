@@ -31,7 +31,8 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 	private List<ActionStatusReader> actionStatus;
 	
 	public ConcreteProcessReader(Element proc, WorkflowReader workflow) throws SAXParseException {
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
+		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();
 		
 //TODO:	if(workflow == null) return;	//safety lock
@@ -91,7 +92,7 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 	@Override
 	public String toString() {
 		StringBuffer buf = new StringBuffer("Process related to workflow: "+workflow.getName()+" ");
-		buf.append("Started at: "+dateFormat.format(startTime.getTime())+"\n");
+		buf.append("Started at: "+dateFormat.format(startTime.getTimeInMillis())+"\n");
 		
 		for(ActionStatusReader asr : actionStatus) {
 			buf.append(asr.toString()+"\n");

@@ -29,7 +29,8 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 	private boolean terminated;
 
 	public ConcreteActionStatusReader(Element action, String wfName) {
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
+		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		endTime = Calendar.getInstance();
 
 //TODO:	if((action == null) || (wfName == null)) return;	//safety lock
@@ -120,7 +121,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		if(takenInCharge) {
 			buf.append(" - taken in charge by: "+actor.getName());
 			if(terminated)
-				buf.append(" - terminated at: "+dateFormat.format(endTime.getTime()));
+				buf.append(" - terminated at: "+dateFormat.format(endTime.getTimeInMillis()));
 			else
 				buf.append(" - not yet terminated");
 		}

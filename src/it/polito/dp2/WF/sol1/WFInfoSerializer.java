@@ -73,7 +73,8 @@ public class WFInfoSerializer {
 		doc.appendChild(root);
 		
 		// This element will help to managing the data format
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
+		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
 	}
 	
 	
@@ -230,7 +231,7 @@ public class WFInfoSerializer {
 		Set<ProcessReader> Processes = monitor.getProcesses();
 		
 		for (ProcessReader pr: Processes) {
-			String startTime = dateFormat.format(pr.getStartTime().getTime());
+			String startTime = dateFormat.format(pr.getStartTime().getTimeInMillis());
 			String wfName = pr.getWorkflow().getName();
 			// creating a process
 			Element process = doc.createElement( WFElements.PROCESS );
@@ -251,7 +252,7 @@ public class WFInfoSerializer {
 					String actor = asr.getActor().getName().replaceAll(" ", "_");
 					action.setAttribute( WFAttributes.ACTION_STATUS_ACTOR, actor );
 					if (asr.isTerminated())	{		//was the action completed?
-						String endTime = dateFormat.format( asr.getTerminationTime().getTime() );
+						String endTime = dateFormat.format( asr.getTerminationTime().getTimeInMillis() );
 						action.setAttribute( WFAttributes.ACTION_STATUS_TIME, endTime );
 					}
 					else {
