@@ -37,7 +37,7 @@
 <!-- how manage action and actor? -->
 
 	
-<!ELEMENT actors (actor)+>
+<!ELEMENT actors (actor)*>
 <!ATTLIST actors
 	department ID #IMPLIED	>
 	
