@@ -24,3 +24,6 @@ DP2_Assignment1.iml
 /build/
 /zip/
 /temp*/
+
+#Junit
+junit*
