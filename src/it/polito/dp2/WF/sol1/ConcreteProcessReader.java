@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 import it.polito.dp2.WF.ActionStatusReader;
 import it.polito.dp2.WF.ProcessReader;
@@ -29,7 +30,7 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 	private WorkflowReader workflow;
 	private List<ActionStatusReader> actionStatus;
 	
-	public ConcreteProcessReader(Element proc, WorkflowReader workflow) {
+	public ConcreteProcessReader(Element proc, WorkflowReader workflow) throws SAXParseException {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();
 		
@@ -50,7 +51,7 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 			startTime.setTime( new Date() );
 		}
 		
-		/* ActionStatus list creation */
+		/* ActionStatusReader list creation */
 		NodeList actionNodes = proc.getElementsByTagName( WFElements.ACTION_STATUS );	//"action_status"
 		actionStatus = new ArrayList<ActionStatusReader>();
 		for (int i=0; i<actionNodes.getLength(); i++) {

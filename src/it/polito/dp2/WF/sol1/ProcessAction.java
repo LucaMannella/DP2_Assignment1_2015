@@ -2,6 +2,7 @@ package it.polito.dp2.WF.sol1;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 import it.polito.dp2.WF.ProcessActionReader;
 import it.polito.dp2.WF.WorkflowReader;
@@ -21,7 +22,7 @@ public class ProcessAction extends AbstractActionReader implements ProcessAction
 
 	private WorkflowReader nextWorkflow;
 
-	public ProcessAction(Element action, WorkflowReader workflow) {
+	public ProcessAction(Element action, WorkflowReader workflow) throws SAXParseException {
 		super(action, workflow);
 
 //TODO	if(action==null) return
@@ -38,7 +39,7 @@ public class ProcessAction extends AbstractActionReader implements ProcessAction
 		for(int i=0; i<workflows.getLength(); i++) {
 			Element wf = (Element)workflows.item(i);
 			if( wf.getAttribute(WFAttributes.WORKFLOW_NAME).equals(wfName) ) {
-				nextWorkflow = new ConcreteWorkflowReader(wf, processes);				
+				nextWorkflow = new ConcreteWorkflowReader(wf, processes);		
 				break;
 			}
 		}

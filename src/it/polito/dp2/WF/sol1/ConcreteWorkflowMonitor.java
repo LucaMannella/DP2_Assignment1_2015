@@ -8,6 +8,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXParseException;
 
 import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.ProcessReader;
@@ -28,7 +29,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	private HashMap<String, WorkflowReader> workflows;
 	private HashMap<String, Actor> actors;
 
-	public ConcreteWorkflowMonitor() { /* --- default constructor --- */
+	public ConcreteWorkflowMonitor() throws SAXParseException { /* --- default constructor --- */
 		String inputFileName = System.getProperty("it.polito.dp2.WF.sol1.WFInfo.file");
 		
 		Document doc = DomUtil.parseDomDocument(inputFileName, true);		
@@ -72,7 +73,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		}
 	}
 	
-	public ConcreteWorkflowMonitor(Element element) {
+	public ConcreteWorkflowMonitor(Element element) throws SAXParseException {
 		setParameter(element);
 	}
 
@@ -120,7 +121,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		return new TreeSet<Actor>(actors.values());
 	}
 	
-	public void setParameter(Element root) {
+	public void setParameter(Element root) throws SAXParseException {
 		if (root == null)
     		throw new IllegalArgumentException("Wrong parameter, element was null!");
     	
