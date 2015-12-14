@@ -28,7 +28,6 @@
 	started CDATA #REQUIRED
 	workflow IDREF #REQUIRED	>
 
-<!-- Do we have to put some information related to the automatic instantiation? -->
 <!ELEMENT action_status EMPTY>
 <!ATTLIST action_status		
 	actor IDREF #IMPLIED
