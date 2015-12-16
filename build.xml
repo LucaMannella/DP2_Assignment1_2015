@@ -74,7 +74,8 @@
 		<echo>Done.</echo>
 	</target>
 
-	<target name="clean">
+	<!-- Target clean -->
+	<target name="clean" description="Clean all">
 		<delete dir="${build.dir}" />
 		<delete includeemptydirs="true">
 		    <fileset dir="${lab1.location}" defaultexcludes="false">
@@ -117,7 +118,7 @@
 		</antcall>
 	</target>
 
-	<target name="runFuncTest" depends="setseed">
+	<target name="runFuncTest" description="Run all the tests" depends="setseed">
 		<antcall target="runFuncTest.real">
 			<param name="test.class" value="${test.class}" />
 			<param name="exit.code" value="126" />
