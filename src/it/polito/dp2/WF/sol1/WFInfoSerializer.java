@@ -40,8 +40,8 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This class serialize a Workflow into an XML file.
- * @author Luca (Sarcares)
+ * This class serialize a Workflow into an XML file using JAXP frameowrk.
+ * @author Luca
  */
 public class WFInfoSerializer {
 	
