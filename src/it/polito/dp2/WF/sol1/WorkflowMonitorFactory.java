@@ -37,7 +37,7 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 	}
 	
 	public String toString(){
-		return "This is a custom WorkflowMonitorFactory implementation.";
+		return "This is a custom WorkflowMonitorFactory implementation for the assignment 1.";
 	}
 
 }
