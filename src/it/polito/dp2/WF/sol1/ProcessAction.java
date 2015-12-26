@@ -11,7 +11,8 @@ import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This is a concrete implementation of abstract class AbstractActionReader (that implements the interface ActionReader).<BR>
- * Another implementation of that abstract class is {@link it.polito.dp2.WF.sol1.SimpleAction}<BR><BR>
+ * Another implementation of that abstract class is {@link it.polito.dp2.WF.sol1.SimpleAction}<BR>
+ * This implementation is based on JAXP framework.<BR><BR>
  * If you want more detail about the interface look to<BR>
  * {@link it.polito.dp2.WF.sol1.AbstractActionReader}<BR>
  * {@link it.polito.dp2.WF.ActionReader}

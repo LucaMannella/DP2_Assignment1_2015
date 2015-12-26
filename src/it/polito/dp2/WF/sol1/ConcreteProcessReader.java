@@ -17,7 +17,7 @@ import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of the interface ProcessReader.<BR><BR>
+ * This is a concrete implementation of the interface ProcessReader based on the JAXP framework.<BR><BR>
  * If you want more detail about the interface look to {@link it.polito.dp2.WF.ProcessReader}
  * 
  * @author Luca

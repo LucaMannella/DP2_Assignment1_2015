@@ -18,7 +18,7 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of the interface WorkflowMonitor.<BR><BR>
+ * This is a concrete implementation of the interface WorkflowMonitor based on the JAXP framework.<BR><BR>
  * If you want more detail about the interface look to {@link it.polito.dp2.WF.WorkflowMonitor}
  * 
  * @author Luca
@@ -95,7 +95,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 	public String toString(){
 		StringBuffer buf = new StringBuffer("Inside this WorkflowMonitor there are:\n");
 		
-		if(workflows==null)
+		if((workflows==null) || (workflows.isEmpty()))
 			buf.append("\tNo Workflows\n");
 		else {
 			buf.append("Workflows:\n");
@@ -103,7 +103,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 				buf.append("\t\t"+wfr.toString()+"\n");
 		}
 		
-		if(processes==null)
+		if((processes==null) || (processes.isEmpty()))
 			buf.append("\tNo Processes\n");
 		else {
 			buf.append("Processes:\n");
@@ -111,7 +111,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 				buf.append("\t"+pr.toString()+"\n");
 		}
 				
-		if(actors==null)
+		if((actors==null) || (actors.isEmpty()))
 			buf.append("\tNo Actors\n");
 		else {
 			buf.append("Actors:\n");
