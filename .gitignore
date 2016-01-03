@@ -22,6 +22,7 @@ DP2_Assignment1.iml
 #application's output files
 /dtd/output*.xml
 /build/
+/log/
 /zip/
 /temp*/
 
