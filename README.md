@@ -1,5 +1,3 @@
-# DP2_Assignment1
-
 Distributed Programming II A.Y. 2015-16
 =======================================
 
