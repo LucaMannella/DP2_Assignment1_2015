@@ -13,8 +13,6 @@ import it.polito.dp2.WF.WorkflowMonitorException;
  */
 public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFactory {
 
-    public WorkflowMonitorFactory() { }
-
 	/**
 	 * This method creates an instance of my concrete class that implements the WorkflowMonitor interface.
 	 */
@@ -36,6 +34,8 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 		return null;
 	}
 	
+	//toString() implemented for debugging purposes
+	@Override
 	public String toString(){
 		return "This is a custom WorkflowMonitorFactory implementation for the assignment 1.";
 	}
