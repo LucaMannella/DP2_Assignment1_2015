@@ -1,6 +1,7 @@
 package it.polito.dp2.WF.sol1;
 
- import org.xml.sax.SAXParseException;
+ import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
@@ -29,7 +30,12 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 		            + ", line " + e.getLineNumber());
 			System.out.println("   " + e.getMessage() );
 			e.printStackTrace();
-			System.exit(-1);
+			System.exit(1);
+		} catch (SAXException e) {
+			System.out.println("Another error happens: \n"
+					+ e.getMessage());
+			e.printStackTrace();
+			System.exit(2);
 		}
 		return null;
 	}
