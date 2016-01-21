@@ -7,7 +7,7 @@ import org.w3c.dom.NodeList;
 public class WFUtil {
 
 	/**
-	 * This method test if the DOM {@link org.w3c.dom.Element} has insed it an Element beloging to {@link it.polito.dp2.WF.sol1.ProcessAction}.
+	 * This method test if the DOM {@link org.w3c.dom.Element} has inside it an Element belongs to {@link it.polito.dp2.WF.sol1.ProcessAction}.
 	 * @param action - The Element that you want to check.
 	 * @return <code>true</code> if the element has a ProcessAction inside it, <code>false</code> otherwise.
 	 */
@@ -24,10 +24,10 @@ public class WFUtil {
 	 * This method take an {@link org.w3c.dom.Element} that have to represent an action that contains a simple_action node.
 	 * The method extracts from that element a String with all the next possible actions that could be executed after the execution of this action.
 	 * @param action - The Element that references a particular action.
-	 * @return A String containg all the possible next actions. It returns <code>null</code> if it is not able to extract the data.
+	 * @return A String containing all the possible next actions. It returns <code>null</code> if it is not able to extract the data.
 	 */
 	public static String takeNextActions(Element action) {
-		// gestisco le Action a cui può puntare
+		// managing the possible actions
 		NodeList list = action.getElementsByTagName(WFElements.SIMPLE_ACTION);
 		if(list== null)
 			return null;
