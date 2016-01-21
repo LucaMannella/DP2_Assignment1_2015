@@ -1,8 +1,14 @@
 package it.polito.dp2.WF.sol1.util;
 
-import java.io.*;
-import javax.xml.parsers.*; 
-import org.xml.sax.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.xml.sax.SAXException;
+import org.xml.sax.SAXParseException;
 
 /**
  * DomParseValidator.java
