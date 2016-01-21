@@ -1,4 +1,4 @@
-package it.polito.dp2.WF.sol1;
+package it.polito.dp2.WF.myTests;
 
 import java.io.IOException;
 import java.text.DateFormat;
