@@ -6,15 +6,15 @@ import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowMonitorException;
 
 /**
- * This is a concrete implementation of the interface WorkflowMonitorFactory.<BR><BR>
- * If you want more detail about the interface look to {@link it.polito.dp2.WF.WorkflowMonitorFactory}
+ * This is a concrete implementation of the interface {@link it.polito.dp2.WF.WorkflowMonitorFactory}.
  * 
  * @author Luca
  */
 public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFactory {
 
 	/**
-	 * This method creates an instance of my concrete class that implements the WorkflowMonitor interface.
+	 * This method creates an instance of the {@link ConcreteWorkflowMonitor} class, 
+	 * a concrete implementation of the {@link WorkflowMonitor} interface.
 	 */
 	@Override
 	public WorkflowMonitor newWorkflowMonitor() throws WorkflowMonitorException {

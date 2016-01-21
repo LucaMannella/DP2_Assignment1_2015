@@ -11,13 +11,11 @@ import it.polito.dp2.WF.SimpleActionReader;
 import it.polito.dp2.WF.WorkflowReader;
 
 /**
- * This is a concrete implementation of abstract class AbstractActionReader (that implements the interface ActionReader).<BR>
- * Another implementation of that abstract class is {@link it.polito.dp2.WF.sol1.ProcessAction}<BR>
- * This implementation is based on JAXP framework.<BR><BR>
- * If you want more detail about the interface look to<BR>
- * {@link it.polito.dp2.WF.sol1.AbstractActionReader}<BR>
- * {@link it.polito.dp2.WF.ActionReader}
+ * This is a concrete implementation of abstract class {@link AbstractActionReader} (that implements the interface ActionReader).<BR>
+ * Another implementation of that abstract class is {@link ProcessAction}<br>
+ * This implementation is based on JAXP framework.
  * 
+ * @see {@link ActionReader}, {@link AbstractActionReader}, {@link ProcessAction}
  * @author Luca
  */
 public class SimpleAction extends AbstractActionReader implements SimpleActionReader {

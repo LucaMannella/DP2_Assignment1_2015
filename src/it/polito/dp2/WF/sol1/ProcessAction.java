@@ -4,19 +4,18 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXParseException;
 
+import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessActionReader;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of abstract class AbstractActionReader (that implements the interface ActionReader).<BR>
- * Another implementation of that abstract class is {@link it.polito.dp2.WF.sol1.SimpleAction}<BR>
- * This implementation is based on JAXP framework.<BR><BR>
- * If you want more detail about the interface look to<BR>
- * {@link it.polito.dp2.WF.sol1.AbstractActionReader}<BR>
- * {@link it.polito.dp2.WF.ActionReader}
- * 
+ * This is a concrete implementation of abstract class {@link AbstractActionReader} (that implements the interface ActionReader).<BR>
+ * Another implementation of that abstract class is {@link SimpleAction}<br>
+ * This implementation is based on JAXP framework.
+ *
+ * @see {@link ActionReader}, {@link AbstractActionReader}, {@link SimpleActionR}
  * @author Luca
  */
 public class ProcessAction extends AbstractActionReader implements ProcessActionReader {

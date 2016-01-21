@@ -1,5 +1,7 @@
 package it.polito.dp2.WF.sol1;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,14 +14,14 @@ import org.xml.sax.SAXParseException;
 
 import it.polito.dp2.WF.Actor;
 import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.WorkflowMonitor;
 import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.util.DomUtil;
 import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of the interface WorkflowMonitor based on the JAXP framework.<BR><BR>
- * If you want more detail about the interface look to {@link it.polito.dp2.WF.WorkflowMonitor}
+ * This is a concrete implementation of the interface {@link WorkflowMonitor} based on the JAXP framework.
  * 
  * @author Luca
  */
@@ -92,32 +94,81 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		return new TreeSet<WorkflowReader>(workflows.values());
 	}
 	
-	public String toString(){
+	@Override
+	public String toString() {
 		StringBuffer buf = new StringBuffer("Inside this WorkflowMonitor there are:\n");
 		
+		buf.append("--- Workflows ---\n");
 		if((workflows==null) || (workflows.isEmpty()))
 			buf.append("\tNo Workflows\n");
 		else {
-			buf.append("Workflows:\n");
 			for(WorkflowReader wfr : workflows.values())
-				buf.append("\t\t"+wfr.toString()+"\n");
+				buf.append(wfr.toString()+"\n");
 		}
+		buf.append("\n");
 		
+		buf.append("--- Processes ---\n");
 		if((processes==null) || (processes.isEmpty()))
 			buf.append("\tNo Processes\n");
 		else {
-			buf.append("Processes:\n");
 			for(ProcessReader pr : processes.values())
-				buf.append("\t"+pr.toString()+"\n");
+				buf.append(pr.toString()+"\n");
 		}
-				
+		buf.append("\n");
+		
+		buf.append("--- Actors ---\n");
 		if((actors==null) || (actors.isEmpty()))
 			buf.append("\tNo Actors\n");
 		else {
-			buf.append("Actors:\n");
 			for(Actor a : actors.values())
 				buf.append("\t"+a.toString()+"\n");
 		}
+		buf.append("\n\n");
+		
+		return buf.toString();
+	}
+
+	/**
+	 * This method is a shorter version of the toString method.
+	 * @return A string that represent the object.
+	 */
+	public String toShortString() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+		
+		StringBuffer buf = new StringBuffer("Inside this WorkflowMonitor there are:\n");
+		
+		buf.append("--- Workflows ---\n");
+		if((workflows==null) || (workflows.isEmpty()))
+			buf.append("\tNo Workflows\n");
+		else {
+			for(WorkflowReader wfr : workflows.values()) {
+				buf.append("\t"+wfr.getName()
+						+" has "+wfr.getActions().size()+" actions and "
+						+wfr.getProcesses().size()+" processes \n");
+			}
+		}
+		buf.append("\n");
+		
+		buf.append("--- Processes ---\n");
+		if((processes==null) || (processes.isEmpty()))
+			buf.append("\tNo Processes\n");
+		else {
+			for(ProcessReader pr : processes.values()) {
+				buf.append("\t prosses belonging to <"+pr.getWorkflow().getName()
+					+"> started at <"+dateFormat.format(pr.getStartTime().getTime())
+					+"> has "+pr.getStatus().size()+" action status\n");
+			}
+		}
+		buf.append("\n\n");
+		
+		buf.append("--- Actors ---\n");
+		if((actors==null) || (actors.isEmpty()))
+			buf.append("\tNo Actors\n");
+		else {
+			for(Actor a : actors.values())
+				buf.append("\t"+a.toString()+"\n");
+		}
+		buf.append("\n\n");
 		
 		return buf.toString();
 	}

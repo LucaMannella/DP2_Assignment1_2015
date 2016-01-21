@@ -8,10 +8,10 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 
 /**
  * This is an abstract implementation of the interface ActionReader based on JAXP framework.<BR>
- * If you want to use that class you have to instantiate one of the following implementation.<BR>
- * {@link it.polito.dp2.WF.sol1.SimpleAction}<BR>{@link it.polito.dp2.WF.sol1.ProcessAction}<BR><BR>
- * If you want more detail about the interface look to {@link it.polito.dp2.WF.ActionReader}
+ * If you want to use that class you have to instantiate one of the following implementation:<BR>
+ * {@link SimpleAction}, {@link ProcessAction}<BR><BR>
  * 
+ * @see {@link ActionReader}, {@link SimpleAction}, {@link ProcessAction}
  * @author Luca
  */
 public abstract class AbstractActionReader implements ActionReader {

@@ -1,5 +1,6 @@
 package it.polito.dp2.WF.sol1;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,8 +18,7 @@ import it.polito.dp2.WF.WorkflowReader;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of the interface ProcessReader based on the JAXP framework.<BR><BR>
- * If you want more detail about the interface look to {@link it.polito.dp2.WF.ProcessReader}
+ * This is a concrete implementation of the interface {@link ProcessReader} based on the JAXP framework.
  * 
  * @author Luca
  */
@@ -97,6 +97,21 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 		for(ActionStatusReader asr : actionStatus) {
 			buf.append(asr.toString()+"\n");
 		}
+		return buf.toString();
+	}
+	
+	/**
+	 * This method gives a short version of the toString method.
+	 * 
+	 * @return A shorted version of the toStrin method.
+	 */
+	public String toShortString() {
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
+		
+		StringBuffer buf = new StringBuffer("Process started at ");
+		buf.append( dateFormat.format(startTime.getTimeInMillis()) );
+		buf.append(" with "+actionStatus.size()+" ActionStatus.");
+		
 		return buf.toString();
 	}
 

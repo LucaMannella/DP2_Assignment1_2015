@@ -40,7 +40,8 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This class serialize a Workflow into an XML file using JAXP frameowrk.
+ * This class serialize a {@link WorkflowMonitor} into an XML file using the JAXP frameowrk.
+ * 
  * @author Luca
  */
 public class WFInfoSerializer {
@@ -56,28 +57,9 @@ public class WFInfoSerializer {
 	public static final String ROOT_Element = WFElements.WORKFLOW_MANAGER;
 
 	/**
-	 * Default constructor - Same as WFInfo
-	 * @throws WorkflowMonitorException 
-	 * @throws ParserConfigurationException 
+	 * This method create an object {@link WFInfoSerializer} and it transforms its content into an XML file.
+	 * @param args [0] - The name of the output file
 	 */
-	public WFInfoSerializer() throws WorkflowMonitorException, ParserConfigurationException {
-		WorkflowMonitorFactory WFfactory = WorkflowMonitorFactory.newInstance();
-		monitor = WFfactory.newWorkflowMonitor();
-		
-		doc = DomUtil.createEmptyDOMDocument(false);
-		if(doc==null)
-			throw new DOMException((short)13, "It's impossible to create a DOM!");
-		
-		// Create and append the root element
-		root = (Element) doc.createElement(ROOT_Element);
-		doc.appendChild(root);
-		
-		// This element will help to managing the data format
-		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
-	}
-	
-	
 	public static void main(String[] args) {
 		// This class should receive the name of the output file.
 		if(args.length != 1) {
@@ -128,6 +110,29 @@ public class WFInfoSerializer {
 	}
 	
 	
+	/**
+	 * Default constructor - Same as WFInfo
+	 * @throws WorkflowMonitorException 
+	 * @throws ParserConfigurationException 
+	 */
+	public WFInfoSerializer() throws WorkflowMonitorException, ParserConfigurationException {
+		WorkflowMonitorFactory WFfactory = WorkflowMonitorFactory.newInstance();
+		monitor = WFfactory.newWorkflowMonitor();
+		
+		doc = DomUtil.createEmptyDOMDocument(false);
+		if(doc==null)
+			throw new DOMException((short)13, "It's impossible to create a DOM!");
+		
+		// Create and append the root element
+		root = (Element) doc.createElement(ROOT_Element);
+		doc.appendChild(root);
+		
+		// This element will help to managing the data format
+		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
+	}
+
+
 	/**
 	 * This method prints a DOM inside an XML file
 	 * @param out - The name that you want to assign to the DOM document that will be written.

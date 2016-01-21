@@ -13,8 +13,7 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This is a concrete implementation of the interface ActionStatusReader based on the JAXP framework.<BR><BR>
- * If you want more detail about the interface look to {@link it.polito.dp2.WF.ActionStatusReader}
+ * This is a concrete implementation of the interface {@link ActionStatusReader} based on the JAXP framework.
  * 
  * @author Luca
  */
