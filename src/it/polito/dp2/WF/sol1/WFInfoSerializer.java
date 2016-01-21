@@ -40,7 +40,7 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
- * This class serialize a {@link WorkflowMonitor} into an XML file using the JAXP frameowrk.
+ * This class serialize a {@link WorkflowMonitor} into an XML file using the JAXP framework.
  * 
  * @author Luca
  */
@@ -128,8 +128,7 @@ public class WFInfoSerializer {
 		doc.appendChild(root);
 		
 		// This element will help to managing the data format
-		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");	//z for timezone and MM for millis
-		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
+		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");		//z for timezone and SS for millis
 	}
 
 
