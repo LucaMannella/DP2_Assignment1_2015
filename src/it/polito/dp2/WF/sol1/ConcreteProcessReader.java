@@ -1,10 +1,5 @@
 package it.polito.dp2.WF.sol1;
 
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.ProcessReader;
-import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.sol1.util.WFElements;
-
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -16,7 +11,11 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
+
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This is a concrete implementation of the interface {@link ProcessReader} based on the JAXP framework.
@@ -35,9 +34,9 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 	 * This method create an implementation of the {@link ProcessReader} interface.
 	 * @param proc - The {@link Process} starting object.
 	 * @param workflow - The {@link WorkflowReader} whom this process belongs.
-	 * @throws SAXException If the selected actor is not able to perform the action.
+	 * @throws SAXException If an actor is not able to perform an action.
 	 */
-	public ConcreteProcessReader(Element proc, WorkflowReader workflow) throws SAXParseException {
+	public ConcreteProcessReader(Element proc, WorkflowReader workflow) throws SAXException {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
 		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();

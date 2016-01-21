@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXParseException;
+import org.xml.sax.SAXException;
 
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessReader;
@@ -28,7 +28,13 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	private Map<String, ActionReader> actions;
 	private Set<ProcessReader> processes;
 
-	public ConcreteWorkflowReader(Element workflow, NodeList procNodes) throws SAXParseException {
+	/**
+	 * This method create an implementation of the {@link WorkflowReader} interface.
+	 * @param workflow - The {@link Process} starting object.
+	 * @param workflow - The {@link WorkflowReader} whom this process belongs.
+	 * @throws SAXException If an actor is not able to perform an action.
+	 */
+	public ConcreteWorkflowReader(Element workflow, NodeList procNodes) throws SAXException {
 		actions = new HashMap<String, ActionReader>();
 		processes = new HashSet<ProcessReader>();
 		

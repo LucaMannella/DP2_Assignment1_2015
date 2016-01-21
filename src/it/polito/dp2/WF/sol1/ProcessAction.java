@@ -2,7 +2,7 @@ package it.polito.dp2.WF.sol1;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXParseException;
+import org.xml.sax.SAXException;
 
 import it.polito.dp2.WF.ActionReader;
 import it.polito.dp2.WF.ProcessActionReader;
@@ -22,7 +22,7 @@ public class ProcessAction extends AbstractActionReader implements ProcessAction
 
 	private WorkflowReader nextWorkflow;
 
-	public ProcessAction(Element action, WorkflowReader workflow) throws SAXParseException {
+	public ProcessAction(Element action, WorkflowReader workflow) throws SAXException {
 		super(action, workflow);
 
 //TODO	if(action==null) return

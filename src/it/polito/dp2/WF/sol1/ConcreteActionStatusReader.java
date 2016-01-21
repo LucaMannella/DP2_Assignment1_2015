@@ -1,11 +1,5 @@
 package it.polito.dp2.WF.sol1;
 
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.Actor;
-import it.polito.dp2.WF.WorkflowReader;
-import it.polito.dp2.WF.sol1.util.WFAttributes;
-import it.polito.dp2.WF.sol1.util.WFElements;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -13,6 +7,12 @@ import java.util.Calendar;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFElements;
 
 /**
  * This is a concrete implementation of the interface {@link ActionStatusReader} based on the JAXP framework.
@@ -35,9 +35,9 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 	 * @param action - An {@link Element} that refer an action.
 	 * @param wfName - The name of the {@link WorkflowReader}
 	 * @param act - The {@link Actor} that should perform the action
-	 * @throws SAXException If the selected actor is not able to perform the action.
+	 * @throws SAXException If the selected actor is not able to perform the action
 	 */
-	public ConcreteActionStatusReader(Element action, String wfName) throws SAXException {
+	public ConcreteActionStatusReader(Element action, String wfName) throws SAXException  {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
 		endTime = Calendar.getInstance();
 
@@ -60,7 +60,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );
 			
 			// this loop is executed just one time in this particular application
-			actor = null;
+			actor = null;	//taking the actor from the document
 			for(int i=0; i<actorsNodes.getLength(); i++) {
 				Element e = (Element) actorsNodes.item(i);
 				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );
@@ -72,7 +72,8 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 						actorName = actorName.replaceAll("_", " ");
 						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE ));
 						System.out.println("Actor name: "+actor.getName()+" actor role: "+actor.getRole());
-						break;
+						break;	
+						//TODO: modify if you want to manage more departments
 					}
 				}
 			}
@@ -88,25 +89,23 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 				Element wf = (Element) workflows.item(i);
 				String anotherWFName = wf.getAttribute( WFAttributes.WORKFLOW_NAME );
 				
-				if(wfName.equals(anotherWFName)) {				
+				if(wfName.equals(anotherWFName)) {
 					NodeList actions = wf.getElementsByTagName(WFElements.ACTION);
 					for(int j=0; j<actions.getLength(); j++) {
 						if(actions.item(j) instanceof Element == false)
 							continue;
 						
 						Element act = (Element) actions.item(j);
+						String actionName = act.getAttribute(WFAttributes.ACTION_NAME).replace(wfName+"_", "");
 						String expectedRole = act.getAttribute(WFAttributes.ACTION_ROLE);
-//ok						
-						if( actor.getRole().equals(expectedRole) ) {
-							System.out.println("Tutto ok!\n"
-									+ "The workflow name is: "+anotherWFName+" and the action name is "+act.getAttribute(WFAttributes.ACTION_NAME)
-									+ "and the expectedRole is "+expectedRole);
-						}
-						else {
-							String errorMessage = "The actor "+actor.getName()+" is not a "+expectedRole+" and he can not execute the action "+this.name+"!"; 
-							System.out.println(errorMessage);
-							
-						//	throw new SAXException(errorMessage);
+						
+						if(this.name.equals(actionName)) {
+							if( actor.getRole().equals(expectedRole) == false) {
+								String errorMessage = "The actor "+actor.getName()+" is not a "+expectedRole+" and he can not execute the action "+this.name+"!"; 
+								System.out.println(errorMessage);
+								
+								throw new SAXException(errorMessage);
+							}
 						}
 					}
 				}

@@ -31,12 +31,12 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 			System.out.println("   " + e.getMessage() );
 			e.printStackTrace();
 			System.exit(1);
-/*		} catch (SAXException e) {
-			System.out.println("Another error happens: \n"
+		} catch (SAXException e) {
+			System.out.println("Invalid Document! \n"
 					+ e.getMessage());
 			e.printStackTrace();
 			System.exit(2);
-		}*/
+		}
 		return null;
 	}
 	
