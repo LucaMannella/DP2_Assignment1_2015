@@ -24,7 +24,7 @@ import it.polito.dp2.WF.sol1.util.DomParseValidator;
 
 /**
  * This class serialize a Workflow into an XML file.
- * @author Luca (Sarcares)
+ * @author Luca
  */
 public class WFInfoSerializerManual {
 	
