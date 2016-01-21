@@ -1,16 +1,18 @@
 package it.polito.dp2.WF.sol1;
 
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.WorkflowReader;
+import it.polito.dp2.WF.sol1.util.WFAttributes;
+import it.polito.dp2.WF.sol1.util.WFElements;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
-import it.polito.dp2.WF.ActionStatusReader;
-import it.polito.dp2.WF.Actor;
-import it.polito.dp2.WF.sol1.util.WFAttributes;
-import it.polito.dp2.WF.sol1.util.WFElements;
+import org.xml.sax.SAXException;
 
 /**
  * This is a concrete implementation of the interface {@link ActionStatusReader} based on the JAXP framework.
@@ -27,9 +29,16 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 	private boolean takenInCharge;
 	private boolean terminated;
 
-	public ConcreteActionStatusReader(Element action, String wfName) {
+	/**
+	 * This method create an implementation of a {@link ActionStatusReader} interface. 
+	 * 
+	 * @param action - An {@link Element} that refer an action.
+	 * @param wfName - The name of the {@link WorkflowReader}
+	 * @param act - The {@link Actor} that should perform the action
+	 * @throws SAXException If the selected actor is not able to perform the action.
+	 */
+	public ConcreteActionStatusReader(Element action, String wfName) throws SAXException {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
-		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		endTime = Calendar.getInstance();
 
 //TODO:	if((action == null) || (wfName == null)) return;	//safety lock
@@ -45,8 +54,9 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			takenInCharge = false;
 			endTime.setTimeInMillis(0);
 		}
-		else {
+		else {	//if we are here the action is takenInCharge or terminated
 			Element root = (Element) action.getParentNode().getParentNode();
+			
 			NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );
 			
 			// this loop is executed just one time in this particular application
@@ -61,13 +71,48 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 					if(a.getAttribute( WFAttributes.ACTOR_NAME ).equals(actorName)) {
 						actorName = actorName.replaceAll("_", " ");
 						this.actor = new Actor(actorName, a.getAttribute( WFAttributes.ACTOR_ROLE ));
+						System.out.println("Actor name: "+actor.getName()+" actor role: "+actor.getRole());
 						break;
 					}
 				}
 			}
 			if(actor == null)
 				System.err.println("The actor is still null... Something wrong in the document!");
-			
+	//here		
+			// retrieving the expected role for the ActionStatus
+			NodeList workflows = root.getElementsByTagName(WFElements.WORKFLOW);
+			for(int i=0; i<workflows.getLength(); i++) {
+				if(workflows.item(i) instanceof Element == false)
+					continue;
+				
+				Element wf = (Element) workflows.item(i);
+				String anotherWFName = wf.getAttribute( WFAttributes.WORKFLOW_NAME );
+				
+				if(wfName.equals(anotherWFName)) {				
+					NodeList actions = wf.getElementsByTagName(WFElements.ACTION);
+					for(int j=0; j<actions.getLength(); j++) {
+						if(actions.item(j) instanceof Element == false)
+							continue;
+						
+						Element act = (Element) actions.item(j);
+						String expectedRole = act.getAttribute(WFAttributes.ACTION_ROLE);
+//ok						
+						if( actor.getRole().equals(expectedRole) ) {
+							System.out.println("Tutto ok!\n"
+									+ "The workflow name is: "+anotherWFName+" and the action name is "+act.getAttribute(WFAttributes.ACTION_NAME)
+									+ "and the expectedRole is "+expectedRole);
+						}
+						else {
+							String errorMessage = "The actor "+actor.getName()+" is not a "+expectedRole+" and he can not execute the action "+this.name+"!"; 
+							System.out.println(errorMessage);
+							
+						//	throw new SAXException(errorMessage);
+						}
+					}
+				}
+			}	//if the actor can't manage this action a SAXException is thrown
+		
+//here			
 			takenInCharge = true;
 			
 			if(timestamp.equals( WFAttributes.STATUS_NOT_FINISHED )) {	//if (timestamp=="Not Finished")
