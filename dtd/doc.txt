@@ -30,3 +30,5 @@ This is not a text specification but I think that it could be usefull to a more 
 
 An "actor" is characterized by a name, which uniquely identifies it (ID), and a role that is simply a string (CDATA).
 I choose to represent also the "actors" like entities because I think that could be a good way for having a program easy to extend to new features.
+
+If an actor was assigned to an action_status with a role that is not equal to the role of the actor an exception was raised at runtime.
