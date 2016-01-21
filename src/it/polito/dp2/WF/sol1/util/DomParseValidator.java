@@ -21,8 +21,6 @@ public class DomParseValidator {
             DocumentBuilderFactory.newInstance();
 
         factory.setValidating(true);
-        //--- Remove comment to deal with namespaces ---//
-        // factory.setNamespaceAware(true);
 
         try {
            DocumentBuilder builder = factory.newDocumentBuilder();
@@ -37,40 +35,23 @@ public class DomParseValidator {
                + ", line " + spe.getLineNumber());
             System.out.println("   " + spe.getMessage() );
             
-            // Print debug info 
-            // Exception  x = spe;
-            // if (spe.getException() != null)
-            //     x = spe.getException(); // exception in user code
-            // x.printStackTrace();
             System.exit(1);
-            
-        } catch (SAXException sxe) {
+        }
+        catch (SAXException sxe) {
         	// Fatal error generated during parsing
         	System.out.println("Fatal error encountered during parsing.");
-
-        	// Print debug info 
-        	// Exception  x = sxe;
-        	// if (sxe.getException() != null)
-        	//     x = sxe.getException(); // exception in user code
-        	// x.printStackTrace();
-        	System.exit(1);
-
-        } catch (ParserConfigurationException pce) {
+          	System.exit(1);
+        }
+        catch (ParserConfigurationException pce) {
         	// Error in parser configuration
         	System.out.println("Parser configuration error. Unable to proceed.");
-            
-        	// Print debug info
-        	// pce.printStackTrace();
-        	System.exit(1);
-
-        } catch (IOException ioe) {
-        	// Read error on file 
-        	System.out.println("Fatal error: Unable to read file.");
-        	
-        	// Print debug info
-        	// ioe.printStackTrace();
         	System.exit(1);
         }
-    } // end of main
+        catch (IOException ioe) {
+        	// Read error on file 
+        	System.out.println("Fatal error: Unable to read file.");
+        	System.exit(1);
+        }
+    }
   
 }
