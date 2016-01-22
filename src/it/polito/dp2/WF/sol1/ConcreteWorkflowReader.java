@@ -38,7 +38,8 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 		actions = new HashMap<String, ActionReader>();
 		processes = new HashSet<ProcessReader>();
 		
-//TODO:	if(workflow == null) return;	//safety lock
+		if(workflow == null) return;	//safety lock
+		
 		this.name = workflow.getAttribute( WFAttributes.WORKFLOW_NAME );				//"name"
 		
 		// set the actions inside the object
@@ -94,7 +95,8 @@ public class ConcreteWorkflowReader implements WorkflowReader, Comparable<Workfl
 	    	}
 		}
 		
-//TODO:	if(procNodes == null) return;		//safety lock 
+		if(procNodes == null) return;		//safety lock
+		
 		// set the processes that refer this Workflow
 		for(int i=0; i<procNodes.getLength(); i++) {
 			if(procNodes.item(i) instanceof Element) {
