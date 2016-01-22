@@ -63,7 +63,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 			throw new IllegalArgumentException("Wrong parameter, \"workflows\" was null or empty!");
 		
 		this.processes = new HashMap<String, ProcessReader>();
-		int code = 1;	//TODO: maybe could be something wrong on this use of code...
+		int code = 1;
 		for(ProcessReader proc : processes) {
 			this.processes.put("p"+code, proc);
 			code++;
@@ -201,17 +201,17 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		NodeList procNodes = root.getElementsByTagName(WFElements.PROCESS);		//"process"
 		
 		/* workflows */
-		System.out.println("DEBUG - In the document there are "+wfNodes.getLength()+" workflows");
+		System.out.println("In the document there are "+wfNodes.getLength()+" workflows");
 	    for (i=0; i<wfNodes.getLength(); i++) {
 	    	if(wfNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
 	    		WorkflowReader wf = new ConcreteWorkflowReader((Element)wfNodes.item(i), procNodes);
 	    		workflows.put(wf.getName(), wf);
 	    	}
 	    }
-		System.out.println("DEBUG - Workflows created");
+		System.out.println("Workflows created");
 		
 		/* processes */
-		System.out.println("DEBUG - In the document there are "+procNodes.getLength()+" processes");
+		System.out.println("In the document there are "+procNodes.getLength()+" processes");
 		int code = 1;
 		for (i=0; i<procNodes.getLength(); i++) {
 			if(procNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
@@ -221,21 +221,21 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 				
 		    	ProcessReader proc = new ConcreteProcessReader(e, myWF);		    	
 		    	processes.put("p"+code, proc);
-		    	System.out.println("DEBUG - I'm the process p"+code+" - My workflow is: "+myWF.getName());
+		    	//System.out.println("DEBUG - I'm the process p"+code+" - My workflow is: "+myWF.getName());
 		    	code++;
 			}
 	    }
-		System.out.println("DEBUG - Processes created");
+		System.out.println("Processes created");
 		
 		/* actors */	//TODO: update this part if you want to manage more departments		
 		NodeList actorsNodes = root.getElementsByTagName( WFElements.ACTORS );		//"actors"
-		System.out.println("DEBUG - Number of tag actors: "+actorsNodes.getLength());
+		System.out.println("Number of tag actors (departments): "+actorsNodes.getLength());
 		// this loop is executed just one time in this particular application
 		for(i=0; i<actorsNodes.getLength(); i++) {
 			if(actorsNodes.item(i) instanceof Element) {	//if I don't take an element I ignore it
 				Element e = (Element) actorsNodes.item(i);
 				NodeList acts = e.getElementsByTagName( WFElements.ACTOR );			//"actor"
-				System.out.println("DEBUG - Number of actor: "+acts.getLength());
+				System.out.println("Number of actor: "+acts.getLength());
 				for(int j=0; j<acts.getLength(); j++) {
 					if(acts.item(i) instanceof Element) {	//if I don't take an element I ignore it
 						e = (Element) acts.item(j);
@@ -249,7 +249,7 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 				}
 			}
 		}
-		System.out.println("DEBUG - Actors created");
+		System.out.println("Actors created");
 		
 		return;
 	}
