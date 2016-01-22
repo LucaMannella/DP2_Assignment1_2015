@@ -41,10 +41,10 @@ public class ConcreteProcessReader implements ProcessReader, Comparable<ProcessR
 		//dateFormat = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss:MM z");
 		startTime = Calendar.getInstance();
 		
-//TODO:	if(workflow == null) return;	//safety lock
 		this.workflow = workflow;
 		
-//TODO:	if(proc == null) return;	//safety lock
+		if(proc == null) return;	//safety lock
+		
 		/* Calendar startTime creation */
 		try {
 			String s = proc.getAttribute("started");
