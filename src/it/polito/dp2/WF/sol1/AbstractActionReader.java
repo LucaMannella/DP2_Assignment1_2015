@@ -9,7 +9,7 @@ import it.polito.dp2.WF.sol1.util.WFAttributes;
 /**
  * This is an abstract implementation of the interface ActionReader based on JAXP framework.<BR>
  * If you want to use that class you have to instantiate one of the following implementation:<BR>
- * {@link SimpleAction}, {@link ProcessAction}<BR><BR>
+ * {@link SimpleAction}, {@link ProcessAction}
  * 
  * @see {@link ActionReader}, {@link SimpleAction}, {@link ProcessAction}
  * @author Luca
@@ -22,7 +22,8 @@ public abstract class AbstractActionReader implements ActionReader {
 	private WorkflowReader parent;
 
 	public AbstractActionReader(Element action, WorkflowReader parent) {
-//TODO:	if(action == null)	return;
+		if(action == null)	return;
+		
 		this.name = action.getAttribute( WFAttributes.ACTION_NAME );				//"name"
 		this.role = action.getAttribute( WFAttributes.ACTION_ROLE );				//"role"
 		
