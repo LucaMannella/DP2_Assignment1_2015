@@ -24,15 +24,17 @@ public class ProcessAction extends AbstractActionReader implements ProcessAction
 
 	public ProcessAction(Element action, WorkflowReader workflow) throws SAXException {
 		super(action, workflow);
-
-//TODO	if(action==null) return
+	
+		if(action==null) return;	//safety lock
 		
 		Element root = (Element) action.getParentNode().getParentNode();
 		NodeList workflows = root.getElementsByTagName(WFElements.WORKFLOW);
 		NodeList processes = root.getElementsByTagName(WFElements.PROCESS);
 		
 		Element processAction = (Element)action.getElementsByTagName(WFElements.PROCESS_ACTION).item(0);
-//		if(processAction == null) return;
+		
+		if(processAction == null) return;	//safety lock
+		
 		String wfName = processAction.getAttribute(WFAttributes.ACTION_PROCESS_NEXT);
 		
 		//for each action I'm looking for its data
