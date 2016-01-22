@@ -41,7 +41,8 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 		dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss:SS z");
 		endTime = Calendar.getInstance();
 
-//TODO:	if((action == null) || (wfName == null)) return;	//safety lock
+		if(action == null) return;	//safety lock
+		
 		String name = action.getAttribute( WFAttributes.ACTION_STATUS_NAME );		//"action"
 		this.name = name.replace(wfName+"_", "");
 		
@@ -79,7 +80,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 			}
 			if(actor == null)
 				System.err.println("The actor is still null... Something wrong in the document!");
-	//here		
+			
 			// retrieving the expected role for the ActionStatus
 			NodeList workflows = root.getElementsByTagName(WFElements.WORKFLOW);
 			for(int i=0; i<workflows.getLength(); i++) {
@@ -111,7 +112,7 @@ public class ConcreteActionStatusReader implements ActionStatusReader {
 				}
 			}	//if the actor can't manage this action a SAXException is thrown
 		
-//here			
+			
 			takenInCharge = true;
 			
 			if(timestamp.equals( WFAttributes.STATUS_NOT_FINISHED )) {	//if (timestamp=="Not Finished")
