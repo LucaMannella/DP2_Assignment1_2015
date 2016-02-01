@@ -39,14 +39,14 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 		
 		Document doc = DomUtil.parseDomDocument(inputFileName, true);		
 		if(doc == null) {
-			System.err.println("The document is null, something wrong happens!");
-			System.exit(12);
+			String errorMessage = "The document is null, something wrong happens!";
+			throw new SAXException(errorMessage);
 		}
 		
 		NodeList list = doc.getElementsByTagName(WFElements.WORKFLOW_MANAGER);
 		if( (list.item(0) == null) || (list.item(0).getNodeType() != Node.ELEMENT_NODE) ) {
-			System.err.println("Something wrong in the root element!");
-			System.exit(13);
+			String errorMessage = "Something wrong in the root element!";
+			throw new SAXException(errorMessage);
 		}
 		
 		Element root = (Element) list.item(0);
@@ -250,8 +250,6 @@ public class ConcreteWorkflowMonitor implements it.polito.dp2.WF.WorkflowMonitor
 			}
 		}
 		System.out.println("Actors created");
-		
-		return;
 	}
 
 }

@@ -50,20 +50,17 @@ public class DomUtil {
 			System.err.println("\n** Internal error.");
 			System.err.println("\t"+se.getMessage());
 			se.printStackTrace();
-			System.exit(22);
 		}
 		catch (ParserConfigurationException pce) {
 			System.err.println("\n** Internal error.");
 			System.err.println("\t Parser with specified options can't be built: "+pce.getMessage());
 			pce.printStackTrace();
-			System.exit(23);
 		}
 		catch (IOException ioe) {
 			// I/O error
 			System.err.println("Unable to open/read the file");
 			System.err.println("Error message: "+ioe.getMessage());
 			ioe.printStackTrace();
-			System.exit(11);
 		}
 		
 		return document;
@@ -73,7 +70,7 @@ public class DomUtil {
 	 * This method take all the elements form the element <code>e</code> with the related tag <code>TagName</code>.
 	 * The method check also that this element have to be of type {@link org.w3c.dom.Element} otherwise it returns <code>null</code>.
 	 * 
-	 * @param e - The element that you want to analize
+	 * @param e - The element that you want to analyze
 	 * @param TagName - The related tag name
 	 * 
 	 * @return It returns the related Element otherwise null.

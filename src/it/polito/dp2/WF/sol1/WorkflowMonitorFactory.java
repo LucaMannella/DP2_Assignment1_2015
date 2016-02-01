@@ -19,6 +19,7 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 	 */
 	@Override
 	public WorkflowMonitor newWorkflowMonitor() throws WorkflowMonitorException {
+		String exitCode;
 		try {
 			WorkflowMonitor myMonitor = new ConcreteWorkflowMonitor();
 			System.out.println("WorkflowMonitor created!");
@@ -30,14 +31,15 @@ public class WorkflowMonitorFactory extends it.polito.dp2.WF.WorkflowMonitorFact
 		            + ", line " + e.getLineNumber());
 			System.out.println("   " + e.getMessage() );
 			e.printStackTrace();
-			System.exit(1);
+			exitCode = "1";
+			throw new WorkflowMonitorException(e, exitCode);
 		} catch (SAXException e) {
 			System.out.println("Invalid Document! \n"
 					+ e.getMessage());
 			e.printStackTrace();
-			System.exit(2);
+			exitCode = "2";
+			throw new WorkflowMonitorException(e, exitCode);
 		}
-		return null;
 	}
 	
 	//toString() implemented for debugging purposes
