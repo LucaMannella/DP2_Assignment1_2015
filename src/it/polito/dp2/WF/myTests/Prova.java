@@ -240,7 +240,7 @@ public class Prova {
 				
 			NodeList lista = doc.getElementsByTagName("WorkflowManager");
 			Element root = (Element)lista.item(0);
-			NodeList workflows = root.getElementsByTagName("workflow");
+//			NodeList workflows = root.getElementsByTagName("workflow");
 			
 			NodeList processes = root.getElementsByTagName("process");
 			for(int i=0; i<processes.getLength(); i++) {
