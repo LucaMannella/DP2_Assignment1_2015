@@ -5,13 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import org.junit.Before;
-import org.junit.BeforeClass;
-import org.junit.Test;
-
-import it.polito.dp2.WF.*;
-import it.polito.dp2.WF.lab1.WFInfo;
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,6 +13,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import it.polito.dp2.WF.ActionReader;
+import it.polito.dp2.WF.ActionStatusReader;
+import it.polito.dp2.WF.Actor;
+import it.polito.dp2.WF.ProcessReader;
+import it.polito.dp2.WF.WorkflowMonitor;
+import it.polito.dp2.WF.WorkflowMonitorFactory;
+import it.polito.dp2.WF.WorkflowReader;
 
 
 public class WFTests {
